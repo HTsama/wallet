@@ -1,0 +1,2 @@
+# wallet
+基于uniapp及typescript重新封装的app框架
