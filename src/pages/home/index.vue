@@ -22,7 +22,11 @@ import { Component, Vue, Inject, Provide } from "vue-property-decorator";
 
 import uWallet from "@/pages/index/index.vue";
 
-@Component
+@Component({
+  components: {
+    "u-wallet": uWallet,
+  },
+})
 export default class extends Vue {
   value = {
     title: "资产",
