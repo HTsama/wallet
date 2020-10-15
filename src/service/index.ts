@@ -2,7 +2,7 @@
 
 import { BigNumber, ethers, providers, Wallet } from 'ethers';
 
-class DatoWallet {
+export class DatoWallet {
   constructor(url: string, chainId: number) {
     this.chainId = chainId;
     this.DATO_provider = new ethers.providers.JsonRpcProvider(url);
@@ -53,15 +53,17 @@ class DatoWallet {
    * 创建一个随机钱包实例
    */
   createWallet() {
-    let that = this;
-    let randomWallet = ethers.Wallet.createRandom();
-    console.dir(randomWallet);
-    console.dir(`地址: ${randomWallet.address}`);
-    console.dir(`私钥: ${randomWallet.privateKey}`);
-    console.dir(`公钥: ${randomWallet.publicKey}`);
-    console.dir(`助记词: ${randomWallet.mnemonic.phrase}`);
-    that.DATO_wallet = randomWallet;
-    return randomWallet;
+    const hdnode_1 = require("@ethersproject/hdnode");
+    const crypto = require('crypto');
+    const entropy = crypto.randomBytes(16);
+    const mnemonic = hdnode_1.entropyToMnemonic(entropy);
+    this.DATO_wallet = Wallet.fromMnemonic(mnemonic);
+    // let randomWallet = ethers.Wallet.createRandom();
+    console.dir(`地址: ${this.DATO_wallet.address}`);
+    console.dir(`私钥: ${this.DATO_wallet.privateKey}`);
+    console.dir(`公钥: ${this.DATO_wallet.publicKey}`);
+    console.dir(`助记词: ${this.DATO_wallet.mnemonic.phrase}`);
+    return this.DATO_wallet;
   }
 
   /**
@@ -118,13 +120,15 @@ class DatoWallet {
   async getBalance() {
     let that = this;
     if (that.DATO_wallet) {
-      let balance: BigNumber | string = await that.DATO_provider.getBalance(that.DATO_wallet.address);
+      let balance: BigNumber = await that.DATO_provider.getBalance(that.DATO_wallet.address);
       //单位转换
-      balance = ethers.utils.formatEther(balance)
-      console.dir(`余额：${balance}`);
+      let v = ethers.utils.formatEther(balance)
+      console.dir(`余额：${v}`);
 
+      return v
     } else {
       console.dir("钱包未创建或未导入")
+      return '0'
     }
 
   }
@@ -187,10 +191,10 @@ class DatoWallet {
 
 }
 
-let datoWallet = new DatoWallet("http://118.190.100.235:8545", 19851111);
-//通过私钥创建新钱包
-datoWallet.createWalletFromPrivateKey("0xc6e412e3a9ca838fa297241bdae3ab21e148571d7d2a9e316a60dd7813f45e9a");
-//查询余额
-datoWallet.getBalance();
-//转账
-datoWallet.transaction("0x8658c2D0754EADA6DC68177a333AE531C1967350", 1);
+// let datoWallet = new DatoWallet("http://118.190.100.235:8545", 19851111);
+// //通过私钥创建新钱包
+// datoWallet.createWalletFromPrivateKey("0xc6e412e3a9ca838fa297241bdae3ab21e148571d7d2a9e316a60dd7813f45e9a");
+// //查询余额
+// datoWallet.getBalance();
+// //转账
+// datoWallet.transaction("0x8658c2D0754EADA6DC68177a333AE531C1967350", 1);

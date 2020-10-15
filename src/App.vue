@@ -1,6 +1,8 @@
 <script lang="ts">
 import Vue from "vue";
 import { globalDataInterface } from "./core/interface";
+const unorm = require("./config/unorm");
+
 export default Vue.extend({
   mpType: "app",
   globalData: {},
