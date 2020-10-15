@@ -37,9 +37,6 @@ export default class extends Vue {
   goPage() {
     uni.navigateTo({
       url: "../creat/index",
-      fail(err) {
-        console.log(err);
-      },
     });
   }
 }
