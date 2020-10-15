@@ -3,41 +3,33 @@
  * @author 张晓龙 <2467365764@qq.com>
  * @copyright 2020
  * @Date 2020-10-13 20:13:27
- * @FilePath /wallet-ts/src/pages/index/index.vue
+ * @FilePath /wallet/src/pages/index/index.vue
 -->
 <template>
-  <div>
-    <u-title></u-title>
-    <view class="content">
-      <view class="view-group">
-        <view class="view-title">
-          <p>创建你的</p>
-          <p>第一个数字钱包</p>
-        </view>
-        <view class="btn-view-group">
-          <view class="btn-view primary">
-            <button class="btn-default" hover-class="btn-hover" @click="goPage">
-              创建钱包
-            </button>
-          </view>
-          <view class="btn-view">
-            <button class="btn-default" hover-class="btn-hover">
-              导入钱包
-            </button>
-          </view>
-        </view>
+  <view class="view-group">
+    <view class="view-title">
+      <p>创建你的</p>
+      <p>第一个数字钱包</p>
+    </view>
+    <view class="btn-view-group">
+      <view class="btn-view primary">
+        <button class="btn-default" hover-class="btn-hover" @click="goPage">
+          创建钱包
+        </button>
+      </view>
+      <view class="btn-view">
+        <button class="btn-default" hover-class="btn-hover">
+          导入钱包
+        </button>
       </view>
     </view>
-  </div>
+  </view>
 </template>
 
 <script>
 import Vue from "vue";
 export default Vue.extend({
-  data() {
-    return {};
-  },
-  onLoad() {},
+  name: "u-wallet",
   methods: {
     goPage() {
       uni.navigateTo({
@@ -55,17 +47,10 @@ export default Vue.extend({
 page {
   background: #ffffff;
 }
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 .view-group {
   width: 750upx;
-  position: fixed;
-  top: 0;
-  bottom: 0;
+  height: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

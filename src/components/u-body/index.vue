@@ -3,11 +3,11 @@
  * @author 张晓龙 <2467365764@qq.com>
  * @copyright 2020
  * @Date 2020-10-14 09:25:18
- * @FilePath /wallet-ts/src/components/u-body/index.vue
+ * @FilePath /wallet/src/components/u-body/index.vue
 -->
 <template>
   <div
-    class="body-view"
+    :class="'body-view ' + bottom == 0 ? 'bottom' : ''"
     :style="{
       height:
         phoneInfo.screenHeight -
@@ -53,9 +53,11 @@ export default Vue.extend({
 .body-view {
   width: 750upx;
   background: #f8f8f8;
+  box-sizing: border-box;
+}
+.body-view.screen {
   padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
   padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
-  box-sizing: border-box;
 }
 .load-view {
   width: 100%;

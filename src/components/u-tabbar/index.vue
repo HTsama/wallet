@@ -3,7 +3,7 @@
  * @author 张晓龙 <2467365764@qq.com>
  * @copyright 2020
  * @Date 2020-10-14 13:29:44
- * @FilePath /wallet-ts/src/components/u-tabbar/index.vue
+ * @FilePath /wallet/src/components/u-tabbar/index.vue
 -->
 <template>
   <div class="tabbar-view">
@@ -15,7 +15,7 @@
     >
       <div
         :class="
-          item.icon + ' tabbar-icon ' + (value == item.icon ? 'active' : '')
+          item.icon + ' tabbar-icon ' + (value == item.value ? 'active' : '')
         "
       ></div>
     </div>
@@ -64,5 +64,23 @@ export default Vue.extend({
 .tabbar-icon {
   width: 25px;
   height: 25px;
+  position: relative;
+  transition: 0.25s;
+  -webkit-transition: 0.25s;
+}
+.tabbar-icon.active {
+  animation: sc 0.5s forwards;
+  -webkit-animation: sc 0.5s forwards;
+}
+@keyframes sc {
+  0% {
+    transform: scale(0.75);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

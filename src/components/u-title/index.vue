@@ -3,11 +3,11 @@
  * @author 张晓龙 <2467365764@qq.com>
  * @copyright 2020
  * @Date 2020-10-14 09:25:18
- * @FilePath /wallet-ts/src/components/u-title/index.vue
+ * @FilePath /wallet/src/components/u-title/index.vue
 -->
 <template>
   <div class="title-view">
-    标题
+    {{ title }}
   </div>
 </template>
 
