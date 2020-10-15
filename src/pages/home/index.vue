@@ -13,6 +13,7 @@
     ></u-title>
     <u-body v-bind:bottom="56">
       <u-wallet v-if="value.value == 'wallet'"></u-wallet>
+      <u-mine v-if="value.value == 'mine'"></u-mine>
     </u-body>
     <u-tabbar :list="tabbar" :value="value.value" @chose="loadPage"></u-tabbar>
   </div>
@@ -21,10 +22,12 @@
 import { Component, Vue } from "vue-property-decorator";
 
 import uWallet from "@/pages/index/index.vue";
+import uMine from "@/pages/mine/index.vue";
 
 @Component({
   components: {
     "u-wallet": uWallet,
+    "u-mine": uMine,
   },
 })
 export default class Home extends Vue {

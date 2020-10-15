@@ -11,6 +11,9 @@
       <p>创建你的</p>
       <p>第一个数字钱包</p>
     </view>
+    <view class="bg">
+      <image src="../../static/home/home-bg.png" mode="aspectFit" />
+    </view>
     <view class="btn-view-group">
       <view class="btn-view primary">
         <button class="btn-default" hover-class="btn-hover" @click="goPage">
@@ -28,7 +31,6 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-
 import uWallet from "@/pages/index/index.vue";
 
 @Component
@@ -46,7 +48,14 @@ export default class extends Vue {
 page {
   background: #ffffff;
 }
-
+.bg {
+  width: 600upx;
+  height: 500upx;
+}
+.bg image {
+  width: 100%;
+  margin-top: 50upx;
+}
 .btn-view-group {
   width: 750upx;
   height: 230upx;
