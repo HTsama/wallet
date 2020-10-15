@@ -28,8 +28,11 @@
       "dom",
       "dom.iterable",
       "scripthost"
-    ]
+    ],
   },
+  "include": [
+    "src/**/*.vue"
+  ],
   "exclude": [
     "node_modules",
     "unpackage",

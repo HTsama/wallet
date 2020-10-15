@@ -6,7 +6,7 @@
  * @FilePath /wallet/src/components/u-title/index.vue
 -->
 <template>
-  <div class="title-view">
+  <div :class="'title-view ' + (theme ? 'theme' : '')">
     {{ title }}
   </div>
 </template>
@@ -24,6 +24,10 @@ export default Vue.extend({
       type: String,
       default: "",
     },
+    theme: {
+      type: Boolean,
+      default: false,
+    },
   },
 });
 </script>
@@ -32,11 +36,15 @@ export default Vue.extend({
   width: 750upx;
   height: 44px;
   padding-top: var(--status-bar-height);
-  background: $main-color;
+  background: #fff;
   display: flex;
-  color: #fff;
-  font-size: 32upx;
+  color: #333;
+  font-size: 38upx;
   align-items: center;
   justify-content: center;
+}
+.title-view.theme {
+  background: $main-color;
+  color: #fff;
 }
 </style>
