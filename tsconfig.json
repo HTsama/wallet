@@ -30,9 +30,6 @@
       "scripthost"
     ],
   },
-  "include": [
-    "src/**/*.vue"
-  ],
   "exclude": [
     "node_modules",
     "unpackage",

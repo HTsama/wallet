@@ -26,21 +26,23 @@
   </view>
 </template>
 
-<script>
-import Vue from "vue";
-export default Vue.extend({
-  name: "u-wallet",
-  methods: {
-    goPage() {
-      uni.navigateTo({
-        url: "../creat/index",
-        fail(err) {
-          console.log(err);
-        },
-      });
-    },
-  },
-});
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+import uWallet from "@/pages/index/index.vue";
+
+@Component
+export default class extends Vue {
+  name = "u-wallet";
+  goPage() {
+    uni.navigateTo({
+      url: "../creat/index",
+      fail(err) {
+        console.log(err);
+      },
+    });
+  }
+}
 </script>
 
 <style>

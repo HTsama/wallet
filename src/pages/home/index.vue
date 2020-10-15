@@ -18,16 +18,17 @@
   </div>
 </template>
 <script lang="ts">
-// import Vue from "vue";
-// import Component from "vue-class-component";
-// import { Component } from "vue-property-decorator";
 import { Component, Vue, Inject, Provide } from "vue-property-decorator";
 
 import uWallet from "@/pages/index/index.vue";
 
 @Component
 export default class extends Vue {
-  value = "wallet";
+  value = {
+    title: "资产",
+    value: "wallet",
+    icon: "wallet",
+  };
   tabbar = [
     {
       title: "资产",
@@ -41,9 +42,8 @@ export default class extends Vue {
     },
   ];
   loadPage(e: any) {
-    this.$;
-    // console.log(this.$utils);
-    // this.value = this.$utils.getObj(this.tabbar, "value", e.value);
+    this.$isServer;
+    this.value = this.$utils.getObj(this.tabbar, "value", e.value);
   }
 }
 </script>

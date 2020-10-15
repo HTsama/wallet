@@ -1,10 +1,9 @@
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import Vue from "vue";
 import { globalDataInterface } from "./core/interface";
-@Component
-export default class extends Vue {
-  mpType = "app";
-  globalData = {};
+export default Vue.extend({
+  mpType: "app",
+  globalData: {},
   onLaunch() {
     let globalData = this.$options.globalData;
     const that = this;
@@ -13,14 +12,14 @@ export default class extends Vue {
         (that.$options.globalData as globalDataInterface).phoneInfo = r;
       },
     });
-  }
+  },
   onShow() {
     console.log("App Show");
-  }
+  },
   onHide() {
     console.log("App Hide");
-  }
-}
+  },
+});
 </script>
 
 <style>
