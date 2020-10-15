@@ -53,15 +53,17 @@ export class DatoWallet {
    * 创建一个随机钱包实例
    */
   createWallet() {
-    let that = this;
-    let randomWallet = ethers.Wallet.createRandom();
-    console.dir(randomWallet);
-    console.dir(`地址: ${randomWallet.address}`);
-    console.dir(`私钥: ${randomWallet.privateKey}`);
-    console.dir(`公钥: ${randomWallet.publicKey}`);
-    console.dir(`助记词: ${randomWallet.mnemonic.phrase}`);
-    that.DATO_wallet = randomWallet;
-    return randomWallet;
+    const hdnode_1 = require("@ethersproject/hdnode");
+    const crypto = require('crypto');
+    const entropy = crypto.randomBytes(16);
+    const mnemonic = hdnode_1.entropyToMnemonic(entropy);
+    this.DATO_wallet = Wallet.fromMnemonic(mnemonic);
+    // let randomWallet = ethers.Wallet.createRandom();
+    console.dir(`地址: ${this.DATO_wallet.address}`);
+    console.dir(`私钥: ${this.DATO_wallet.privateKey}`);
+    console.dir(`公钥: ${this.DATO_wallet.publicKey}`);
+    console.dir(`助记词: ${this.DATO_wallet.mnemonic.phrase}`);
+    return this.DATO_wallet;
   }
 
   /**
