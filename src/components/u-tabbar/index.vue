@@ -22,10 +22,10 @@
   </div>
 </template>
 
-<script>
-import Vue from "vue";
-export default Vue.extend({
-  name: "u-tabbar",
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+@Component({
   props: {
     list: {
       type: Array,
@@ -36,12 +36,13 @@ export default Vue.extend({
       default: "",
     },
   },
-  methods: {
-    itemChose(e) {
-      this.$emit("chose", e);
-    },
-  },
-});
+})
+export default class UTabbar extends Vue {
+  name = "u-tabbar";
+  itemChose(e: any) {
+    this.$emit("chose", e);
+  }
+}
 </script>
 <style lang="scss">
 .tabbar-view {

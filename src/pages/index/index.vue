@@ -37,9 +37,6 @@ export default class extends Vue {
   goPage() {
     uni.navigateTo({
       url: "../creat/index",
-      fail(err) {
-        console.log(err);
-      },
     });
   }
 }
@@ -49,28 +46,7 @@ export default class extends Vue {
 page {
   background: #ffffff;
 }
-.view-group {
-  width: 750upx;
-  height: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-}
-.view-title {
-  width: 690upx;
-  height: 300upx;
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  justify-content: flex-start;
-}
-.view-title p {
-  color: #2a7cff;
-  font-size: 64upx;
-}
+
 .btn-view-group {
   width: 750upx;
   height: 230upx;

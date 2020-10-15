@@ -24,10 +24,10 @@
   </div>
 </template>
 
-<script>
-import Vue from "vue";
-export default Vue.extend({
-  name: "u-body",
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+
+@Component({
   props: {
     top: {
       type: Number,
@@ -42,12 +42,11 @@ export default Vue.extend({
       default: false,
     },
   },
-  beforeCreate() {
-    this.phoneInfo = getApp().globalData.phoneInfo;
-    console.log(getApp().globalData.phoneInfo);
-  },
-  created() {},
-});
+})
+export default class UBody extends Vue {
+  name = "u-body";
+  phoneInfo = this.globalData;
+}
 </script>
 <style lang="scss">
 .body-view {
