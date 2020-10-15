@@ -8,7 +8,7 @@
 <template>
   <div>
     <u-title
-      v-bind:title="value.title"
+      v-bind:title="value.value == 'mine' ? value.title : ''"
       :theme="value.value == 'mine' ? true : false"
     ></u-title>
     <u-body v-bind:bottom="56">
@@ -18,7 +18,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Inject, Provide } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
 import uWallet from "@/pages/index/index.vue";
 
@@ -27,7 +27,7 @@ import uWallet from "@/pages/index/index.vue";
     "u-wallet": uWallet,
   },
 })
-export default class extends Vue {
+export default class Home extends Vue {
   value = {
     title: "资产",
     value: "wallet",

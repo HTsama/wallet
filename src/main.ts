@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { utilsInterface } from "./core/interface";
+import { utilsInterface, globalDataInterface } from "./core/interface";
 
 Vue.config.productionTip = false;
 
@@ -13,6 +13,7 @@ import utils from './util/index';
 declare module 'vue/types/vue' {
   interface Vue {
     $utils: utilsInterface;
+    globalData: globalDataInterface;
   }
 }
 
@@ -20,7 +21,6 @@ declare module 'vue/types/vue' {
 
 
 Vue.prototype.$utils = utils;
-
 
 Vue.component('u-title', uTitle);
 Vue.component('u-body', uBody);

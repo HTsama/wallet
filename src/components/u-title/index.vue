@@ -7,14 +7,15 @@
 -->
 <template>
   <div :class="'title-view ' + (theme ? 'theme' : '')">
+    <div class="back u-arrow-left iconfont" v-if="back" @click="goBack"></div>
     {{ title }}
   </div>
 </template>
 
-<script>
-import Vue from "vue";
-export default Vue.extend({
-  name: "u-title",
+<script lang="ts">
+import { Component, Vue, Watch } from "vue-property-decorator";
+
+@Component({
   props: {
     title: {
       type: String,
@@ -29,7 +30,18 @@ export default Vue.extend({
       default: false,
     },
   },
-});
+})
+export default class UTitle extends Vue {
+  back = false;
+  mounted() {
+    if (getCurrentPages().length > 1) {
+      this.back = true;
+    }
+  }
+  goBack() {
+    uni.navigateBack({});
+  }
+}
 </script>
 <style lang="scss">
 .title-view {
@@ -45,6 +57,21 @@ export default Vue.extend({
 }
 .title-view.theme {
   background: $main-color;
+  color: #fff;
+}
+.back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  padding-top: var(--status-bar-height);
+  justify-content: center;
+  align-items: center;
+  color: $main-color;
+}
+.theme .back {
   color: #fff;
 }
 </style>

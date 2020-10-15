@@ -5,13 +5,7 @@ export default Vue.extend({
   mpType: "app",
   globalData: {},
   onLaunch() {
-    let globalData = this.$options.globalData;
-    const that = this;
-    uni.getSystemInfo({
-      success(r) {
-        (that.$options.globalData as globalDataInterface).phoneInfo = r;
-      },
-    });
+    Vue.prototype.globalData = uni.getSystemInfoSync();
   },
   onShow() {
     console.log("App Show");
