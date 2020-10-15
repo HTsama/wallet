@@ -2,7 +2,7 @@
 
 import { BigNumber, ethers, providers, Wallet } from 'ethers';
 
-class DatoWallet {
+export class DatoWallet {
   constructor(url: string, chainId: number) {
     this.chainId = chainId;
     this.DATO_provider = new ethers.providers.JsonRpcProvider(url);
@@ -118,13 +118,15 @@ class DatoWallet {
   async getBalance() {
     let that = this;
     if (that.DATO_wallet) {
-      let balance: BigNumber | string = await that.DATO_provider.getBalance(that.DATO_wallet.address);
+      let balance: BigNumber = await that.DATO_provider.getBalance(that.DATO_wallet.address);
       //单位转换
-      balance = ethers.utils.formatEther(balance)
-      console.dir(`余额：${balance}`);
+      let v = ethers.utils.formatEther(balance)
+      console.dir(`余额：${v}`);
 
+      return v
     } else {
       console.dir("钱包未创建或未导入")
+      return '0'
     }
 
   }
@@ -187,10 +189,10 @@ class DatoWallet {
 
 }
 
-let datoWallet = new DatoWallet("http://118.190.100.235:8545", 19851111);
-//通过私钥创建新钱包
-datoWallet.createWalletFromPrivateKey("0xc6e412e3a9ca838fa297241bdae3ab21e148571d7d2a9e316a60dd7813f45e9a");
-//查询余额
-datoWallet.getBalance();
-//转账
-datoWallet.transaction("0x8658c2D0754EADA6DC68177a333AE531C1967350", 1);
+// let datoWallet = new DatoWallet("http://118.190.100.235:8545", 19851111);
+// //通过私钥创建新钱包
+// datoWallet.createWalletFromPrivateKey("0xc6e412e3a9ca838fa297241bdae3ab21e148571d7d2a9e316a60dd7813f45e9a");
+// //查询余额
+// datoWallet.getBalance();
+// //转账
+// datoWallet.transaction("0x8658c2D0754EADA6DC68177a333AE531C1967350", 1);
