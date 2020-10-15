@@ -7,44 +7,47 @@
 -->
 <template>
   <div>
-    <u-title v-bind:title="value"></u-title>
+    <u-title
+      v-bind:title="value.title"
+      :theme="value.value == 'mine' ? true : false"
+    ></u-title>
     <u-body v-bind:bottom="56">
-      <!-- <u-wallet></u-wallet> -->
+      <u-wallet v-if="value.value == 'wallet'"></u-wallet>
     </u-body>
-    <u-tabbar :list="tabbar" :value="value" @chose="loadPage"></u-tabbar>
+    <u-tabbar :list="tabbar" :value="value.value" @chose="loadPage"></u-tabbar>
   </div>
 </template>
-<script>
-import uWallet from "@/pages/index/index";
+<script lang="ts">
+import { Component, Vue, Inject, Provide } from "vue-property-decorator";
 
-import Vue from "vue";
+import uWallet from "@/pages/index/index.vue";
 
-export default Vue.extend({
-  name: "home",
+@Component({
   components: {
-    uWallet,
+    "u-wallet": uWallet,
   },
-  data() {
-    return {
-      value: "资产",
-      tabbar: [
-        {
-          title: "资产",
-          value: "资产",
-          icon: "wallet",
-        },
-        {
-          title: "我的",
-          value: "我的",
-          icon: "mine",
-        },
-      ],
-    };
-  },
-  methods: {
-    loadPage(e) {
-      this.value = e.value;
+})
+export default class extends Vue {
+  value = {
+    title: "资产",
+    value: "wallet",
+    icon: "wallet",
+  };
+  tabbar = [
+    {
+      title: "资产",
+      value: "wallet",
+      icon: "wallet",
     },
-  },
-});
+    {
+      title: "我的",
+      value: "mine",
+      icon: "mine",
+    },
+  ];
+  loadPage(e: any) {
+    this.$isServer;
+    this.value = this.$utils.getObj(this.tabbar, "value", e.value);
+  }
+}
 </script>
