@@ -154,20 +154,12 @@ export class DatoWalletService {
   }
   //=============================================================
   //查询余额
-  async getBalance() {
+  async getBalance(address: string) {
     let that = this;
-    if (that.DATO_wallet) {
-      let balance: BigNumber = await that.DATO_provider.getBalance(that.DATO_wallet.address);
-      //单位转换
-      let v = ethers.utils.formatEther(balance)
-      console.dir(`余额：${v}`);
-
-      return v
-    } else {
-      console.dir("钱包未创建或未导入")
-      return '0'
-    }
-
+    let balance: BigNumber = await that.DATO_provider.getBalance(address);
+    //单位转换
+    let v = ethers.utils.formatEther(balance)
+    return v
   }
   //转账： toAddress 转给地址，amount 金额
   transaction(toAddress: string, amount: number) {

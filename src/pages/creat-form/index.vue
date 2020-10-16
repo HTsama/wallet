@@ -68,7 +68,7 @@
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import { DatoWallet } from "../../service/index";
+import { DatoWalletService } from "../../service/index";
 
 @Component()
 export default class CreateForm extends Vue {
@@ -77,10 +77,12 @@ export default class CreateForm extends Vue {
   walletInfo = {};
   localwallet = [];
   form = {};
+  type = 0;
   onLoad(options) {
-    this.DatoWallet = new DatoWallet(
-      this.WALLET_CONFIG[options.type].ip,
-      this.WALLET_CONFIG[options.type].id
+    this.type = options.type;
+    this.DatoWallet = new DatoWalletService(
+      this.WALLET_CONFIG[this.type].ip,
+      this.WALLET_CONFIG[this.type].id
     );
     this.localwallet = uni.getStorageSync("wallet");
   }
@@ -134,15 +136,13 @@ export default class CreateForm extends Vue {
               name: this.form.name,
               password: this.form.password,
               tips: this.form.tips,
+              type: this.type,
             },
             wallet: this.walletInfo,
           },
         ],
       ];
-      uni.setStorage({
-        key: "wallet",
-        data: this.localwallet,
-      });
+      uni.setStorageSync("wallet", this.localwallet);
     }
   }
 }

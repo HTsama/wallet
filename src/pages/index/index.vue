@@ -6,24 +6,31 @@
  * @FilePath /wallet/src/pages/index/index.vue
 -->
 <template>
-  <div class="view-group">
-    <div class="view-title">
-      <p>创建你的</p>
-      <p>第一个数字钱包</p>
-    </div>
-    <div class="bg">
-      <image src="../../static/home/home-bg.png" mode="aspectFit" />
-    </div>
-    <div class="btn-view-group">
-      <div class="btn-view primary">
-        <button class="btn-default" hover-class="btn-hover" @click="goPage">
-          创建钱包
-        </button>
+  <div>
+    <div class="view-group" v-if="status == 0">
+      <div class="view-title">
+        <p>创建你的</p>
+        <p>第一个数字钱包</p>
       </div>
-      <div class="btn-view">
-        <button class="btn-default" hover-class="btn-hover">
-          导入钱包
-        </button>
+      <div class="bg">
+        <image src="../../static/home/home-bg.png" mode="aspectFit" />
+      </div>
+      <div class="btn-view-group">
+        <div class="btn-view primary">
+          <button class="btn-default" hover-class="btn-hover" @click="goPage">
+            创建钱包
+          </button>
+        </div>
+        <div class="btn-view">
+          <button class="btn-default" hover-class="btn-hover">
+            导入钱包
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="view-group" v-if="status == 1">
+      <div class="card">
+        {{ balance }}
       </div>
     </div>
   </div>
@@ -31,15 +38,37 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { DatoWalletService } from "../../service/index";
 import uWallet from "@/pages/index/index.vue";
 
 @Component
 export default class extends Vue {
   name = "u-wallet";
   localwallet = [];
-  beforeCreate() {
+  walletIndex = 0;
+  status = 0;
+  balance = "";
+  mounted() {
     this.localwallet = uni.getStorageSync("wallet");
-    console.log(this.localwallet);
+    this.walletIndex = uni.getStorageSync("walletIndex");
+    if (this.localwallet.length > 0) {
+      this.status = 1;
+    }
+    if (!this.walletIndex) {
+      this.walletIndex = 0;
+      uni.setStorageSync("walletIndex", this.walletIndex);
+    }
+    this.handleQueryBalance();
+  }
+  async handleQueryBalance() {
+    const creatTyp: "DETO" = (this as any).localwallet[this.walletIndex].info
+      .type;
+    const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
+    const creatId: number = Number(this.WALLET_CONFIG[creatTyp].id);
+    let DatoWallet = new DatoWalletService(creatIp, creatId);
+    this.balance = await DatoWallet.getBalance(
+      (this as any).localwallet[this.walletIndex].wallet.address
+    );
   }
   goPage() {
     uni.navigateTo({
@@ -49,10 +78,7 @@ export default class extends Vue {
 }
 </script>
 
-<style>
-page {
-  background: #ffffff;
-}
+<style lang="scss">
 .bg {
   width: 600upx;
   height: 500upx;
@@ -69,5 +95,11 @@ page {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30rpx;
+}
+.card {
+  width: 690upx;
+  height: 300upx;
+  border-radius: 20upx;
+  background: linear-gradient(to right bottom, $main-color, $main-color-opac);
 }
 </style>

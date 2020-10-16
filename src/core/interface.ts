@@ -17,7 +17,7 @@ export interface utilsInterface {
 
 export interface WalletConfigInterface {
   DETO: {
-    ip: String,
-    id: String
+    ip: string,
+    id: string
   }
 }
