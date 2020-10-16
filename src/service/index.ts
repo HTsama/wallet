@@ -1,8 +1,8 @@
-//ETH 充值提现 合约地址
-
 import { BigNumber, ethers, providers, Wallet } from 'ethers';
+import { Mnemonic } from "@ethersproject/hdnode";
 
-interface JSON {
+// 导入钱包的JSON
+export interface JSON {
   id: string;
   address: string;
   Crypto: {
@@ -18,13 +18,28 @@ interface JSON {
     mac: string;
     cipher: "aes-128-ctr";
     cipherparams: {
+      /** aes-ctr-128 需要使用的初始化矢量 */
       iv: string
     }
   };
   version: number
 }
 
-export class DatoWallet {
+// Dato币钱包对象
+export interface DatoWallet {
+  /** 钱包的地址 */
+  address: string;
+  /** 钱包的私钥(注意保密) */
+  privateKey: string;
+  /** 钱包的助记词对象 */
+  mnemonic: Mnemonic;
+  /** 提供者 */
+  provider: providers.JsonRpcProvider
+}
+
+
+// Dato币钱包服务
+export class DatoWalletService {
   constructor(url: string, chainId: number) {
     this.chainId = chainId;
     this.DATO_provider = new ethers.providers.JsonRpcProvider(url);
