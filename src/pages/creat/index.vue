@@ -45,6 +45,9 @@ import uWallet from "@/pages/index/index.vue";
 @Component()
 export default class Create extends Vue {
   title = "创建钱包";
+  beforeCreate() {
+    console.log(this.WALLET_CONFIG);
+  }
 }
 </script>
 
