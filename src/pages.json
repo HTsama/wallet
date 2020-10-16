@@ -4,18 +4,14 @@
       "path": "pages/home/index",
       "style": {
         "titleNView": false,
-        "app-plus": {
-          "bounce": "none"
-        }
+        "app-plus": {}
       }
     },
     {
       "path": "pages/index/index",
       "style": {
         "titleNView": false,
-        "app-plus": {
-          "bounce": "none"
-        }
+        "app-plus": {}
       }
     },
     {
@@ -28,9 +24,14 @@
       "path": "pages/creat/index",
       "style": {
         "titleNView": false,
-        "app-plus": {
-          "bounce": "none"
-        }
+        "app-plus": {}
+      }
+    },
+    {
+      "path": "pages/creat-form/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {}
       }
     }
   ],

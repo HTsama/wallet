@@ -39,26 +39,19 @@
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import { DatoWallet } from "../../service/index";
 
 @Component()
 export default class Create extends Vue {
-  title = "创建钱包";
-  DatoWallet = {};
+  title = "选择钱包体系";
   creat(e) {
-    this.DatoWallet = new DatoWallet(
-      this.WALLET_CONFIG[e].ip,
-      this.WALLET_CONFIG[e].id
-    );
-    this.DatoWallet.createWallet();
+    uni.navigateTo({
+      url: "../creat-form/index?type=" + e,
+    });
   }
 }
 </script>
 
 <style>
-page {
-  background: #ffffff;
-}
 .list-image {
   width: 170upx;
   height: 110upx;

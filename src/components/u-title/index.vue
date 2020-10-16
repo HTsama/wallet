@@ -50,10 +50,14 @@ export default class UTitle extends Vue {
   padding-top: var(--status-bar-height);
   background: #fff;
   display: flex;
-  color: #333;
   font-size: 38upx;
   align-items: center;
   justify-content: center;
+  color: $main-color;
+  position: relative;
+  z-index: 1;
+  position: fixed;
+  top: 0;
 }
 .title-view.theme {
   background: $main-color;
