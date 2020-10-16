@@ -23,7 +23,7 @@
               mode="aspectFit"
             />
           </view>
-          <view class="list-view">
+          <view class="list-view" @click="creat('DETO')">
             <p>DETO</p>
             <image
               class="list-image"
@@ -44,9 +44,11 @@ import { DatoWallet } from "../../service/index";
 @Component()
 export default class Create extends Vue {
   title = "创建钱包";
-  beforeCreate() {
-    console.log(this.WALLET_CONFIG);
-    DatoWallet = new DatoWallet(this.WALLET_CONFIG.ip, this.WALLET_CONFIG.id);
+  creat(e) {
+    DatoWallet = new DatoWallet(
+      this.WALLET_CONFIG[e].ip,
+      this.WALLET_CONFIG[e].id
+    );
     this.DatoWallet.createWallet();
   }
 }
