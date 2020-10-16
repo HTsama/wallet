@@ -13,7 +13,7 @@
     ></u-title>
     <u-body v-bind:bottom="56">
       <u-wallet v-if="value.value == 'wallet'"></u-wallet>
-      <u-mine v-if="value.value == 'mine'"></u-mine>
+      <!-- <u-mine v-if="value.value == 'mine'"></u-mine> -->
     </u-body>
     <u-tabbar :list="tabbar" :value="value.value" @chose="loadPage"></u-tabbar>
   </div>

@@ -102,7 +102,7 @@ export default class CreateForm extends Vue {
         duration: 2000,
       });
       return;
-    } else if (!this.form.password.length < 8) {
+    } else if (this.form.password.length < 8) {
       uni.showToast({
         title: "密码不能少于8位",
         icon: "none",
