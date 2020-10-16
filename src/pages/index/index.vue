@@ -6,7 +6,7 @@
  * @FilePath /wallet/src/pages/index/index.vue
 -->
 <template>
-  <div>
+  <div class="v-g">
     <div class="view-group" v-if="status == 0">
       <div class="view-title">
         <p>创建你的</p>
@@ -28,9 +28,20 @@
         </div>
       </div>
     </div>
-    <div class="view-group" v-if="status == 1">
+    <div class="view-group card-view" v-if="status == 1">
       <div class="card">
-        {{ balance }}
+        <p>我的资产（¥）</p>
+        <p>{{ balance }}</p>
+        <div class="card-bg">
+          <image
+            :src="
+              '../../static/home/card/' +
+                localwallet[walletIndex].info.type +
+                '.png'
+            "
+            mode="aspectFit"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -79,6 +90,9 @@ export default class extends Vue {
 </script>
 
 <style lang="scss">
+.v-g {
+  height: 100%;
+}
 .bg {
   width: 600upx;
   height: 500upx;
@@ -98,8 +112,34 @@ export default class extends Vue {
 }
 .card {
   width: 690upx;
+  position: relative;
+  margin-top: 30upx;
   height: 300upx;
   border-radius: 20upx;
   background: linear-gradient(to right bottom, $main-color, $main-color-opac);
+}
+.card p {
+  color: #fff;
+  font-size: 28upx;
+  padding: 30upx 30upx 10upx 30upx;
+}
+.card p:nth-child(2) {
+  font-size: 48upx;
+  font-weight: bold;
+}
+.card-bg {
+  width: 200upx;
+  height: 200upx;
+  position: absolute;
+  right: 30upx;
+  top: 50%;
+  margin-top: -100upx;
+}
+.card-bg image {
+  width: 100%;
+  height: 100%;
+}
+.view-group.card-view {
+  justify-content: flex-start;
 }
 </style>
