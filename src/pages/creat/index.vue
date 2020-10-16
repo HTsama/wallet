@@ -44,8 +44,9 @@ import { DatoWallet } from "../../service/index";
 @Component()
 export default class Create extends Vue {
   title = "创建钱包";
+  DatoWallet = {};
   creat(e) {
-    DatoWallet = new DatoWallet(
+    this.DatoWallet = new DatoWallet(
       this.WALLET_CONFIG[e].ip,
       this.WALLET_CONFIG[e].id
     );
