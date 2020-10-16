@@ -39,14 +39,15 @@
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-
-import uWallet from "@/pages/index/index.vue";
+import { DatoWallet } from "../../service/index";
 
 @Component()
 export default class Create extends Vue {
   title = "创建钱包";
   beforeCreate() {
     console.log(this.WALLET_CONFIG);
+    DatoWallet = new DatoWallet(this.WALLET_CONFIG.ip, this.WALLET_CONFIG.id);
+    this.DatoWallet.createWallet();
   }
 }
 </script>
