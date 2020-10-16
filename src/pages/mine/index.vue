@@ -39,12 +39,12 @@ export default class Mine extends Vue {
       // 随机生成助记词
       const m = "";
       this.mnemonic = m;
-      this.walletInfo = this.DatoWallet.createWalletFromMnemonic(m);
+      this.walletInfo = this.DatoWallet.importWalletFromMnemonic(m);
     }
     if (action === "PrivateKey") {
       // 根据私钥
       const privateKey = "";
-      this.walletInfo = this.DatoWallet.createWalletFromPrivateKey(privateKey);
+      this.walletInfo = this.DatoWallet.importWalletFromPrivateKey(privateKey);
     }
   }
   handleQueryBalance() {
