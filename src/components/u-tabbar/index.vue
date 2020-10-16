@@ -47,6 +47,9 @@ export default class UTabbar extends Vue {
 <style lang="scss">
 .tabbar-view {
   width: 750upx;
+  position: fixed;
+  bottom: 0;
+  background: #fff;
   height: 56px;
   padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
   padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */

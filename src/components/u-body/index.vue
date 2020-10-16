@@ -6,8 +6,9 @@
  * @FilePath /wallet/src/components/u-body/index.vue
 -->
 <template>
-  <div
-    :class="'body-view ' + bottom == 0 ? 'bottom' : ''"
+  <scroll-view
+    scroll-y
+    :class="'body-view ' + (bottom == 0 ? 'bottom' : '')"
     :style="{
       height:
         phoneInfo.screenHeight -
@@ -16,12 +17,13 @@
         phoneInfo.safeAreaInsets.bottom -
         phoneInfo.statusBarHeight +
         'px',
+      marginTop: 44 + phoneInfo.statusBarHeight + 'px',
     }"
   >
     <div class="load-view">
       <slot></slot>
     </div>
-  </div>
+  </scroll-view>
 </template>
 
 <script lang="ts">
@@ -51,7 +53,6 @@ export default class UBody extends Vue {
 <style lang="scss">
 .body-view {
   width: 750upx;
-  background: #f8f8f8;
   box-sizing: border-box;
 }
 .body-view.screen {
