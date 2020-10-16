@@ -6,27 +6,27 @@
  * @FilePath /wallet/src/pages/index/index.vue
 -->
 <template>
-  <view class="view-group">
-    <view class="view-title">
+  <div class="view-group">
+    <div class="view-title">
       <p>创建你的</p>
       <p>第一个数字钱包</p>
-    </view>
-    <view class="bg">
+    </div>
+    <div class="bg">
       <image src="../../static/home/home-bg.png" mode="aspectFit" />
-    </view>
-    <view class="btn-view-group">
-      <view class="btn-view primary">
+    </div>
+    <div class="btn-view-group">
+      <div class="btn-view primary">
         <button class="btn-default" hover-class="btn-hover" @click="goPage">
           创建钱包
         </button>
-      </view>
-      <view class="btn-view">
+      </div>
+      <div class="btn-view">
         <button class="btn-default" hover-class="btn-hover">
           导入钱包
         </button>
-      </view>
-    </view>
-  </view>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -36,6 +36,11 @@ import uWallet from "@/pages/index/index.vue";
 @Component
 export default class extends Vue {
   name = "u-wallet";
+  localwallet = [];
+  beforeCreate() {
+    this.localwallet = uni.getStorageSync("wallet");
+    console.log(this.localwallet);
+  }
   goPage() {
     uni.navigateTo({
       url: "../creat/index",
@@ -64,29 +69,5 @@ page {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30rpx;
-}
-.btn-view {
-  width: 690upx;
-  height: 100upx;
-  border-radius: 8upx;
-  color: #2a7cff;
-}
-button::after {
-  border: none;
-}
-.btn-default {
-  border: none;
-}
-.btn-view .btn-default {
-  color: #2a7cff;
-  background: #f5f5f5;
-  border-radius: 50upx;
-}
-.btn-view.primary .btn-default {
-  color: #fff;
-  background: #2a7cff;
-}
-.btn-hover {
-  opacity: 0.8;
 }
 </style>

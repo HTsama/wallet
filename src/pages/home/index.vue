@@ -48,6 +48,9 @@ export default class Home extends Vue {
       icon: "mine",
     },
   ];
+  beforeCreate() {
+    console.log(this.WALLET_CONFIG);
+  }
   loadPage(e: any) {
     this.$isServer;
     this.value = this.$utils.getObj(this.tabbar, "value", e.value);

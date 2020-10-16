@@ -14,3 +14,10 @@ export interface utilsInterface {
   /** 获取数组中某key和某值对等的对象 */
   getObj: (arg0: Array<any>, arg1: String, arg2: String) => any;
 }
+
+export interface WalletConfigInterface {
+  DETO: {
+    ip: String,
+    id: String
+  }
+}

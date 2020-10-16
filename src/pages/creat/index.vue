@@ -23,7 +23,7 @@
               mode="aspectFit"
             />
           </view>
-          <view class="list-view">
+          <view class="list-view" @click="creat('DETO')">
             <p>DETO</p>
             <image
               class="list-image"
@@ -40,18 +40,18 @@
 <script>
 import { Component, Vue } from "vue-property-decorator";
 
-import uWallet from "@/pages/index/index.vue";
-
 @Component()
 export default class Create extends Vue {
-  title = "创建钱包";
+  title = "选择钱包体系";
+  creat(e) {
+    uni.navigateTo({
+      url: "../creat-form/index?type=" + e,
+    });
+  }
 }
 </script>
 
 <style>
-page {
-  background: #ffffff;
-}
 .list-image {
   width: 170upx;
   height: 110upx;

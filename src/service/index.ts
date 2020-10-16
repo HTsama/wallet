@@ -59,10 +59,10 @@ export class DatoWallet {
     const mnemonic = hdnode_1.entropyToMnemonic(entropy);
     this.DATO_wallet = Wallet.fromMnemonic(mnemonic);
     // let randomWallet = ethers.Wallet.createRandom();
-    console.dir(`地址: ${this.DATO_wallet.address}`);
-    console.dir(`私钥: ${this.DATO_wallet.privateKey}`);
-    console.dir(`公钥: ${this.DATO_wallet.publicKey}`);
-    console.dir(`助记词: ${this.DATO_wallet.mnemonic.phrase}`);
+    console.log(`地址: ${this.DATO_wallet.address}`);
+    console.log(`私钥: ${this.DATO_wallet.privateKey}`);
+    console.log(`公钥: ${this.DATO_wallet.publicKey}`);
+    console.log(`助记词: ${this.DATO_wallet.mnemonic.phrase}`);
     return this.DATO_wallet;
   }
 
