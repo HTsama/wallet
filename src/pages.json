@@ -33,6 +33,20 @@
         "titleNView": false,
         "app-plus": {}
       }
+    },
+    {
+      "path": "pages/import-fun/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {}
+      }
+    },
+    {
+      "path": "pages/import-key/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {}
+      }
     }
   ],
   "globalStyle": {

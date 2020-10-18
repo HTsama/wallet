@@ -17,12 +17,20 @@
       </div>
       <div class="btn-view-group">
         <div class="btn-view primary">
-          <button class="btn-default" hover-class="btn-hover" @click="goPage">
+          <button
+            class="btn-default"
+            hover-class="btn-hover"
+            @click="goPage('creat')"
+          >
             创建钱包
           </button>
         </div>
         <div class="btn-view">
-          <button class="btn-default" hover-class="btn-hover">
+          <button
+            class="btn-default"
+            hover-class="btn-hover"
+            @click="goPage('import')"
+          >
             导入钱包
           </button>
         </div>
@@ -70,7 +78,7 @@ export default class extends Vue {
   // 钱包状态
   status = 0;
   //余额
-  balance = "10.0";
+  balance = "0.0";
   init() {
     this.localwallet = uni.getStorageSync("wallet");
     this.walletIndex = uni.getStorageSync("walletIndex");
@@ -103,15 +111,15 @@ export default class extends Vue {
     const creatTyp: "DETO" | "ETH" = this.localwallet[this.walletIndex].info
       .type;
     const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
-
-    this.balance = await DatoWallet.getBalance(
+    this.balance = await this.$utils.getBalance(
+      creatIp,
       this.localwallet[this.walletIndex].wallet.address
     );
     console.log(this.balance);
   }
-  goPage() {
+  goPage(type: string) {
     uni.navigateTo({
-      url: "../creat/index",
+      url: "../creat/index?type=" + type,
     });
   }
 }

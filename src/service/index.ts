@@ -1,8 +1,15 @@
 import { BigNumber, ethers, providers, Wallet } from 'ethers';
 
 import { Mnemonic } from "@ethersproject/hdnode";
+// #ifdef APP-PLUS
+// (global as any).http = uni;
+// console.log(uni.getSystemInfoSync().platform);
+// (global as any).XMLHttpRequest = plus.net.XMLHttpRequest;
+// #endif
+// (global as any).XMLHttpRequest = XMLHttpRequest;
+// (global as any).XMLHttpRequest = plus.net.XMLHttpRequest
 
-// import { web3 } from "@/service/web3/lib/index.js";
+import web3 from 'web3'
 // 导入钱包的JSON
 export interface JSON {
   id: string;
@@ -157,35 +164,17 @@ export class DatoWalletService {
   //=============================================================
   //查询余额
   async getBalance(address: string) {
-    // this.DATO_provider.getBalance(address).then((e) => { console.log(e) }).catch((e: any) => console.log(e));
-    // uni.request({
-    //   url: 'http://118.190.100.235:8545', //仅为示例，并非真实接口地址。
-    //   method: 'POST',
-    //   data: {
-    //     id: 46,
-    //     jsonrpc: "2.0",
-    //     method: "eth_getBalance",
-    //     params: [
-    //       address,
-    //       "latest"
-    //     ]
-    //   },
-    //   success: (res: any) => {
-    //     console.log(ethers.utils.formatEther(res.data.result))
-    //     // console.log('余额=' + res.);
-    //   }
-    // });
-    this.DATO_provider.getBalance(address).catch((e) => {
-      console.log(e);
-    })
-    // let that = this;
-    // console.log('-------------')
-    // that.DATO_provider.getBalance(address).then().catch((e: any) => console.log(e));
-    // let balance: BigNumber = 
-    let balance = await this.DATO_provider.getBalance(address);
-    // console.log('-----------&&&--')
+    // #ifdef APP-PLUS
+    (global as any).XMLHttpRequest = plus.net.XMLHttpRequest;
+    // #endif
+    (global as any).XMLHttpRequest = XMLHttpRequest;
+    // this.DATO_provider.getBalance(address).then((e) => {
+    //   console.log(e);
+    // }).catch((r) => {
+    //   console.log(r)
+    // })
     // // //单位转换
-    let v = ethers.utils.formatEther(balance._hex)
+    let v = ethers.utils.formatEther(await new web3('http://118.190.100.235:8545').eth.getBalance(address))
     return v
   }
   //转账： toAddress 转给地址，amount 金额
