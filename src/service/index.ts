@@ -158,90 +158,90 @@ export class DatoWalletService {
   //查询余额
   async getBalance(address: string) {
     // this.DATO_provider.getBalance(address).then((e) => { console.log(e) }).catch((e: any) => console.log(e));
-    uni.request({
-      //   url: 'http://118.190.100.235:8545', //仅为示例，并非真实接口地址。
-      //   method: 'POST',
-      //   data: {
-      //     id: 46,
-      //     jsonrpc: "2.0",
-      //     method: "eth_getBalance",
-      //     params: [
-      //       address,
-      //       "latest"
-      //     ]
-      //   },
-      //   success: (res: any) => {
-      //     console.log(ethers.utils.formatEther(res.data.result))
-      //     // console.log('余额=' + res.);
-      //   }
-      // });
-      this.DATO_provider.getBalance(address).catch((e) => {
-        console.log(e);
-      })
+    // uni.request({
+    //   url: 'http://118.190.100.235:8545', //仅为示例，并非真实接口地址。
+    //   method: 'POST',
+    //   data: {
+    //     id: 46,
+    //     jsonrpc: "2.0",
+    //     method: "eth_getBalance",
+    //     params: [
+    //       address,
+    //       "latest"
+    //     ]
+    //   },
+    //   success: (res: any) => {
+    //     console.log(ethers.utils.formatEther(res.data.result))
+    //     // console.log('余额=' + res.);
+    //   }
+    // });
+    this.DATO_provider.getBalance(address).catch((e) => {
+      console.log(e);
+    })
     // let that = this;
     // console.log('-------------')
     // that.DATO_provider.getBalance(address).then().catch((e: any) => console.log(e));
     // let balance: BigNumber = 
     let balance = await this.DATO_provider.getBalance(address);
-      // console.log('-----------&&&--')
-      // // //单位转换
-      let v = ethers.utils.formatEther(balance._hex)
+    // console.log('-----------&&&--')
+    // // //单位转换
+    let v = ethers.utils.formatEther(balance._hex)
     return v
-    }
+  }
   //转账： toAddress 转给地址，amount 金额
   transaction(toAddress: string, amount: number) {
-      let that = this;
-      let gasPricePromise = that.DATO_provider.getGasPrice();
-      let balancePromise = that.DATO_provider.getBalance(that.DATO_wallet!.address)
+    let that = this;
+    let gasPricePromise = that.DATO_provider.getGasPrice();
+    let balancePromise = that.DATO_provider.getBalance(that.DATO_wallet!.address)
     let transactionCountPromise = that.DATO_provider.getTransactionCount(that.DATO_wallet!.address);
-      let allPromises = Promise.all([
-        gasPricePromise,
-        balancePromise,
-        transactionCountPromise
-      ]);
-      let sendPromise = allPromises.then(async function (results) {
-        let gasPrice = results[0];
-        let balance = results[1];
-        let transactionCount = results[2];
-        let txFeeInWei = gasPrice.mul(21000);
-        let value: BigNumber = balance.sub(txFeeInWei);
-        //判断扣掉Gas手续费后 余额大于转账额度
-        if (Number(ethers.utils.formatEther(value)) < amount) {
-          console.dir("余额不足");
-          return;
-        }
-        let transaction = {
-          to: toAddress,
-          gasPrice: gasPrice,
-          gasLimit: 21000,
-          nonce: transactionCount,
-          value: ethers.utils.parseEther(`${amount}`),
-          chainId: that.chainId,
-        };
-        //交易信息
-        console.dir("交易信息");
+    let allPromises = Promise.all([
+      gasPricePromise,
+      balancePromise,
+      transactionCountPromise
+    ]);
+    let sendPromise = allPromises.then(async function (results) {
+      let gasPrice = results[0];
+      let balance = results[1];
+      let transactionCount = results[2];
+      let txFeeInWei = gasPrice.mul(21000);
+      let value: BigNumber = balance.sub(txFeeInWei);
+      //判断扣掉Gas手续费后 余额大于转账额度
+      if (Number(ethers.utils.formatEther(value)) < amount) {
+        console.dir("余额不足");
+        return;
+      }
+      let transaction = {
+        to: toAddress,
+        gasPrice: gasPrice,
+        gasLimit: 21000,
+        nonce: transactionCount,
+        value: ethers.utils.parseEther(`${amount}`),
+        chainId: that.chainId,
+      };
+      //交易信息
+      console.dir("交易信息");
+      console.dir(transaction);
+      //签名后的交易
+      let signedTransaction = await that.DATO_wallet!.signTransaction(transaction);
+      //发送交易信息到网络
+      return that.DATO_provider.sendTransaction(signedTransaction);
+    });
+    let minedPromise = sendPromise.then(function (transaction) {
+      if (transaction) {
+        //向网络成功发送交易信息
+        console.dir("向网络成功发送交易信息")
+        console.dir(transaction)
+        //等待公链挖矿确认
+        return that.DATO_provider.waitForTransaction(transaction.hash);
+      }
+    });
+    minedPromise.then(function (transaction) {
+      if (transaction) {
+        //公链已确认 在blockNumber区块中
+        console.dir("公链已确认交易信息");
         console.dir(transaction);
-        //签名后的交易
-        let signedTransaction = await that.DATO_wallet!.signTransaction(transaction);
-        //发送交易信息到网络
-        return that.DATO_provider.sendTransaction(signedTransaction);
-      });
-      let minedPromise = sendPromise.then(function (transaction) {
-        if (transaction) {
-          //向网络成功发送交易信息
-          console.dir("向网络成功发送交易信息")
-          console.dir(transaction)
-          //等待公链挖矿确认
-          return that.DATO_provider.waitForTransaction(transaction.hash);
-        }
-      });
-      minedPromise.then(function (transaction) {
-        if (transaction) {
-          //公链已确认 在blockNumber区块中
-          console.dir("公链已确认交易信息");
-          console.dir(transaction);
-          console.log("The transaction was mined: Block " + transaction.blockNumber);
-        }
-      });
-    }
+        console.log("The transaction was mined: Block " + transaction.blockNumber);
+      }
+    });
+  }
 }
