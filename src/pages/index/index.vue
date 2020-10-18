@@ -30,8 +30,10 @@
     </div>
     <div class="view-group card-view" v-if="status == 1">
       <div class="card">
-        <p>我的资产（¥）</p>
-        <p>{{ balance }}</p>
+        <p>我的资产</p>
+        <p>
+          {{ balance }}<span>{{ localwallet[walletIndex].info.type }}</span>
+        </p>
         <div class="card-bg">
           <image
             :src="
@@ -41,6 +43,14 @@
             "
             mode="aspectFit"
           />
+        </div>
+        <div class="card-more">
+          <div class="card-more-list">
+            转账
+          </div>
+          <div class="card-more-list">
+            收款
+          </div>
         </div>
       </div>
     </div>
@@ -55,11 +65,13 @@ import uWallet from "@/pages/index/index.vue";
 @Component
 export default class extends Vue {
   name = "u-wallet";
-  localwallet = [];
+  localwallet: Array<any> = [];
   walletIndex = 0;
+  // 钱包状态
   status = 0;
-  balance = "";
-  mounted() {
+  //余额
+  balance = "10.0";
+  init() {
     this.localwallet = uni.getStorageSync("wallet");
     this.walletIndex = uni.getStorageSync("walletIndex");
     if (this.localwallet.length > 0) {
@@ -69,17 +81,33 @@ export default class extends Vue {
       this.walletIndex = 0;
       uni.setStorageSync("walletIndex", this.walletIndex);
     }
-    this.handleQueryBalance();
+    const DatoWallet = this.creatServe();
+    if (DatoWallet) {
+      this.handleQueryBalance(DatoWallet);
+    }
   }
-  async handleQueryBalance() {
-    const creatTyp: "DETO" = (this as any).localwallet[this.walletIndex].info
+  // 创建服务
+  creatServe() {
+    if (this.localwallet) {
+      const creatTyp: "DETO" | "ETH" = this.localwallet[this.walletIndex].info
+        .type;
+      const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
+      const creatId: number = Number(this.WALLET_CONFIG[creatTyp].id);
+      return new DatoWalletService(creatIp, creatId);
+    } else {
+      return false;
+    }
+  }
+  // 获取余额
+  async handleQueryBalance(DatoWallet: DatoWalletService) {
+    const creatTyp: "DETO" | "ETH" = this.localwallet[this.walletIndex].info
       .type;
     const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
-    const creatId: number = Number(this.WALLET_CONFIG[creatTyp].id);
-    let DatoWallet = new DatoWalletService(creatIp, creatId);
+
     this.balance = await DatoWallet.getBalance(
-      (this as any).localwallet[this.walletIndex].wallet.address
+      this.localwallet[this.walletIndex].wallet.address
     );
+    console.log(this.balance);
   }
   goPage() {
     uni.navigateTo({
@@ -141,5 +169,42 @@ export default class extends Vue {
 }
 .view-group.card-view {
   justify-content: flex-start;
+}
+.card p span {
+  font-size: 32upx;
+  margin-left: 20upx;
+}
+.card-more {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  height: 80upx;
+}
+.card-more-list {
+  font-size: 28upx;
+  color: #fff;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+}
+.card-more-list::after {
+  position: absolute;
+  right: 0;
+  width: 2upx;
+  height: 26upx;
+  top: 50%;
+  margin-top: -13upx;
+  background: #fff;
+  content: "";
+}
+.card-more-list:last-child::after {
+  display: none;
 }
 </style>

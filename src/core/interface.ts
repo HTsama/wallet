@@ -18,6 +18,10 @@ export interface utilsInterface {
 export interface WalletConfigInterface {
   DETO: {
     ip: string,
-    id: string
+    id: number
+  },
+  ETH: {
+    ip: string,
+    id: number
   }
 }

@@ -143,6 +143,9 @@ export default class CreateForm extends Vue {
         ],
       ];
       uni.setStorageSync("wallet", this.localwallet);
+      uni.navigateBack({
+        delta: 2,
+      });
     }
   }
 }
