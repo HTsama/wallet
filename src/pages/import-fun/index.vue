@@ -2,8 +2,8 @@
  * @Description 
  * @author 张晓龙 <2467365764@qq.com>
  * @copyright 2020
- * @Date 2020-10-13 23:13:27
- * @FilePath /wallet/src/pages/creat/index.vue
+ * @Date 2020-10-18 22:39:17
+ * @FilePath /wallet/src/pages/import-fun/index.vue
 -->
 <template>
   <div>
@@ -12,24 +12,22 @@
       <div class="view-group">
         <div class="view-title">
           <p>选择</p>
-          <p>钱包体系</p>
+          <p>导入方式</p>
         </div>
         <div class="list-group">
-          <view class="list-view">
-            <p>以太坊</p>
-            <image
+          <view class="list-view" @click="creat('DETO')">
+            <p>私钥</p>
+            <!-- <image
               class="list-image"
               :src="require('../../static/home/yt.png')"
               mode="aspectFit"
-            />
+            /> -->
           </view>
           <view class="list-view" @click="creat('DETO')">
-            <p>DETO</p>
-            <image
-              class="list-image"
-              :src="require('../../static/home/deto.png')"
-              mode="aspectFit"
-            />
+            <p>助记词</p>
+          </view>
+          <view class="list-view" @click="creat('DETO')">
+            <p>Keystore</p>
           </view>
         </div>
       </div>
@@ -41,20 +39,12 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component()
-export default class Create extends Vue {
-  title = "选择钱包体系";
-  type = "creat";
+export default class ImportFun extends Vue {
+  title = "选择导入方式";
   creat(e) {
-    console.log(e);
-    if (this.type == "creat") {
-      uni.navigateTo({
-        url: "../creat-form/index?type=" + e,
-      });
-    } else {
-      uni.navigateTo({
-        url: "../import-fun/index?type=" + e,
-      });
-    }
+    uni.navigateTo({
+      url: "../import-key/index?type=" + e,
+    });
   }
   onLoad(options) {
     this.type = options.type;
@@ -80,8 +70,8 @@ export default class Create extends Vue {
   justify-content: flex-start;
 }
 .list-view {
-  width: 330upx;
-  height: 230upx;
+  width: 210upx;
+  height: 210upx;
   border-radius: 16upx;
   background: linear-gradient(to right bottom, #7983ff 10%, #2d7afe);
   margin-top: 30upx;

@@ -5,6 +5,8 @@
  * @Date 2020-10-15 09:22:09
  * @FilePath /wallet/src/util/index.ts
  */
+import web3 from 'web3';
+import { BigNumber, ethers, providers, Wallet } from 'ethers';
 import { utilsInterface } from "../core/interface";
 let globalData = {
   isObject: (obj: any) => {
@@ -36,7 +38,16 @@ export const getObj = (arr: Array<any>, title: string, name: string) => {
   }
   return d;
 };
+
+export const getBalance = async (url: string, address: string) => {
+  // #ifdef APP-PLUS
+  (global as any).XMLHttpRequest = plus.net.XMLHttpRequest;
+  // #endif
+  (global as any).XMLHttpRequest = XMLHttpRequest;
+  return ethers.utils.formatEther(await new web3(url).eth.getBalance(address))
+}
 export default <utilsInterface>{
   getObj: getObj,
-  getValue: getValue
+  getValue: getValue,
+  getBalance: getBalance
 }

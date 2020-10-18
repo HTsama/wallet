@@ -10,5 +10,9 @@ export const WALLET_CONFIG = {
   DETO: {
     ip: "http://118.190.100.235:8545",
     id: 19851111
+  },
+  ETH: {
+    ip: "",
+    id: 0
   }
 }

@@ -3,7 +3,7 @@
  * @author 张晓龙 <2467365764@qq.com>
  * @copyright 2020
  * @Date 2020-10-16 12:16:52
- * @FilePath /wallet/src/pages/creat-form/index.vue
+ * @FilePath /wallet/src/pages/import-key/index.vue
 -->
 <template>
   <div>
@@ -11,8 +11,8 @@
     <u-body>
       <div class="view-group">
         <div class="view-title">
-          <p>创建</p>
-          <p>你的钱包</p>
+          <p>私钥</p>
+          <p>导入钱包</p>
         </div>
         <div class="form-group">
           <div class="form-list-view">
@@ -49,6 +49,14 @@
               @changevalue="changevalue"
             />
           </div>
+          <div class="form-list-view">
+            <u-input
+              title="私钥"
+              name="key"
+              placeholder="请输入私钥"
+              @changevalue="changevalue"
+            />
+          </div>
         </div>
         <div class="btn-group">
           <div class="btn-view primary">
@@ -71,8 +79,8 @@ import { Component, Vue } from "vue-property-decorator";
 import { DatoWalletService } from "../../service/index";
 
 @Component()
-export default class CreateForm extends Vue {
-  title = "创建钱包";
+export default class ImportKey extends Vue {
+  title = "私钥导入";
   DatoWallet = {};
   walletInfo = {};
   localwallet = [];
@@ -122,8 +130,17 @@ export default class CreateForm extends Vue {
         duration: 2000,
       });
       return;
+    } else if (this.form.key == "") {
+      uni.showToast({
+        title: "请输入私钥",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
     } else {
-      this.walletInfo = this.DatoWallet.createWallet();
+      this.walletInfo = this.DatoWallet.importWalletFromPrivateKey(
+        this.form.key
+      );
       if (!this.localwallet) {
         this.localwallet = [];
       }
@@ -143,7 +160,7 @@ export default class CreateForm extends Vue {
       ];
       uni.setStorageSync("wallet", this.localwallet);
       uni.navigateBack({
-        delta: 2,
+        delta: 3,
       });
     }
   }

@@ -22,38 +22,38 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { DatoWallet } from "../../service/index";
+import { DatoWalletService } from "../../service/index";
 
 @Component
 export default class Mine extends Vue {
-  balance = "0"; // 余额
-  mnemonic = ""; // 助记词
-  DatoWallet = new DatoWallet("http://118.190.100.235:8545", 19851111); // DATO钱包对象
-  walletInfo = {}; // 当前钱包信息
-  handleCreateWallet(action: any) {
-    if (!action) {
-      this.walletInfo = this.DatoWallet.createWallet();
-      console.log(this.walletInfo);
-    }
-    if (action === "Mnemonic") {
-      // 随机生成助记词
-      const m = "";
-      this.mnemonic = m;
-      this.walletInfo = this.DatoWallet.createWalletFromMnemonic(m);
-    }
-    if (action === "PrivateKey") {
-      // 根据私钥
-      const privateKey = "";
-      this.walletInfo = this.DatoWallet.createWalletFromPrivateKey(privateKey);
-    }
-  }
-  handleQueryBalance() {
-    this.DatoWallet.getBalance().then((balance: string) => {
-      if (balance) {
-        this.balance = balance;
-      }
-    });
-  }
+  // balance = "0";
+  // mnemonic = "";
+  // DatoWallet = new DatoWalletService("http://118.190.100.235:8545", 19851111); // DATO钱包对象
+  // walletInfo = {};
+  // handleCreateWallet(action: any) {
+  //   if (!action) {
+  //     this.walletInfo = this.DatoWallet.createWallet();
+  //     console.log(this.walletInfo);
+  //   }
+  //   if (action === "Mnemonic") {
+  //     // 随机生成助记词
+  //     const m = "";
+  //     this.mnemonic = m;
+  //     this.walletInfo = this.DatoWallet.importWalletFromMnemonic(m);
+  //   }
+  //   if (action === "PrivateKey") {
+  //     // 根据私钥
+  //     const privateKey = "";
+  //     this.walletInfo = this.DatoWallet.importWalletFromPrivateKey(privateKey);
+  //   }
+  // }
+  // handleQueryBalance() {
+  //   this.DatoWallet.getBalance().then((balance: string) => {
+  //     if (balance) {
+  //       this.balance = balance;
+  //     }
+  //   });
+  // }
 }
 </script>
 

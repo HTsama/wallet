@@ -1,8 +1,54 @@
-//ETH 充值提现 合约地址
-
 import { BigNumber, ethers, providers, Wallet } from 'ethers';
 
-export class DatoWallet {
+import { Mnemonic } from "@ethersproject/hdnode";
+// #ifdef APP-PLUS
+// (global as any).http = uni;
+// console.log(uni.getSystemInfoSync().platform);
+// (global as any).XMLHttpRequest = plus.net.XMLHttpRequest;
+// #endif
+// (global as any).XMLHttpRequest = XMLHttpRequest;
+// (global as any).XMLHttpRequest = plus.net.XMLHttpRequest
+
+import web3 from 'web3'
+// 导入钱包的JSON
+export interface JSON {
+  id: string;
+  address: string;
+  Crypto: {
+    kdfparams: {
+      dklen: number;
+      p: number;
+      salt: string;
+      r: number;
+      n: number;
+    },
+    kdf: "scrypt";
+    ciphertext: string;
+    mac: string;
+    cipher: "aes-128-ctr";
+    cipherparams: {
+      /** aes-ctr-128 需要使用的初始化矢量 */
+      iv: string
+    }
+  };
+  version: number
+}
+
+// Dato币钱包对象
+export interface DatoWallet {
+  /** 钱包的地址 */
+  address: string;
+  /** 钱包的私钥(注意保密) */
+  privateKey: string;
+  /** 钱包的助记词对象 */
+  mnemonic: Mnemonic;
+  /** 提供者 */
+  provider: providers.JsonRpcProvider
+}
+
+
+// Dato币钱包服务
+export class DatoWalletService {
   constructor(url: string, chainId: number) {
     this.chainId = chainId;
     this.DATO_provider = new ethers.providers.JsonRpcProvider(url);
@@ -13,14 +59,14 @@ export class DatoWallet {
   private DATO_provider: providers.JsonRpcProvider;
 
   //测试 钱包创建 与 钱包导入
-  test() {
+  private test() {
     //创建新钱包
     this.DATO_wallet = this.createWallet();
     //通过助记词创建新钱包
-    this.DATO_wallet = this.createWalletFromMnemonic("window habit dragon snake case alien roast clock hold bar public dust");
+    this.DATO_wallet = this.importWalletFromMnemonic("window habit dragon snake case alien roast clock hold bar public dust");
     //通过私钥创建新钱包
-    this.DATO_wallet = this.createWalletFromPrivateKey("0xc6e412e3a9ca838fa297241bdae3ab21e148571d7d2a9e316a60dd7813f45e9a");
-    let data = {
+    this.DATO_wallet = this.importWalletFromPrivateKey("0xc6e412e3a9ca838fa297241bdae3ab21e148571d7d2a9e316a60dd7813f45e9a");
+    let data: JSON = {
       id: "fb1280c0-d646-4e40-9550-7026b1be504a",
       address: "88a5c2d9919e46f883eb62f7b8dd9d0cc45bc290",
       Crypto: {
@@ -41,8 +87,8 @@ export class DatoWallet {
       },
       "version": 3
     };
-    //通过object json 和密码创建新钱包
-    this.createWalletFromJsonAndPwd(data, "foo");
+    //通过object json 和密码导入新钱包
+    this.importWalletFromJsonAndPwd(data, "foo");
     //转账： toAddress 转给地址，amount 金额
     this.transaction("0x8658c2D0754EADA6DC68177a333AE531C1967350", 1);
   }
@@ -67,10 +113,10 @@ export class DatoWallet {
   }
 
   /**
-   * 通过助记词创建新钱包
+   * 通过助记词导入钱包
    * @param String mnemonic 助记词
    */
-  createWalletFromMnemonic(mnemonic: string) {
+  importWalletFromMnemonic(mnemonic: string) {
     let that = this;
     let mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
     console.dir(mnemonicWallet);
@@ -83,10 +129,10 @@ export class DatoWallet {
   }
 
   /**
-   * 通过私钥创建新钱包
+   * 通过私钥导入钱包
    * @param privateKey 
    */
-  createWalletFromPrivateKey(privateKey: string) {
+  importWalletFromPrivateKey(privateKey: string) {
     let that = this;
     let wallet = new ethers.Wallet(privateKey);
     console.dir(wallet);
@@ -101,7 +147,7 @@ export class DatoWallet {
    * @param json 
    * @param pwd 
    */
-  createWalletFromJsonAndPwd(json: any, pwd: string) {
+  importWalletFromJsonAndPwd(json: JSON, pwd: string) {
     let that = this;
     let jsonstr = JSON.stringify(json);
     ethers.Wallet.fromEncryptedJson(jsonstr, pwd).then(function (wallet) {
@@ -117,44 +163,43 @@ export class DatoWallet {
   }
   //=============================================================
   //查询余额
-  async getBalance() {
-    let that = this;
-    if (that.DATO_wallet) {
-      let balance: BigNumber = await that.DATO_provider.getBalance(that.DATO_wallet.address);
-      //单位转换
-      let v = ethers.utils.formatEther(balance)
-      console.dir(`余额：${v}`);
-
-      return v
-    } else {
-      console.dir("钱包未创建或未导入")
-      return '0'
-    }
-
+  async getBalance(address: string) {
+    // #ifdef APP-PLUS
+    (global as any).XMLHttpRequest = plus.net.XMLHttpRequest;
+    // #endif
+    (global as any).XMLHttpRequest = XMLHttpRequest;
+    // this.DATO_provider.getBalance(address).then((e) => {
+    //   console.log(e);
+    // }).catch((r) => {
+    //   console.log(r)
+    // })
+    // // //单位转换
+    let v = ethers.utils.formatEther(await new web3('http://118.190.100.235:8545').eth.getBalance(address))
+    return v
   }
   //转账： toAddress 转给地址，amount 金额
   transaction(toAddress: string, amount: number) {
     let that = this;
-    var gasPricePromise = that.DATO_provider.getGasPrice();
-    var balancePromise = that.DATO_provider.getBalance(that.DATO_wallet!.address)
-    var transactionCountPromise = that.DATO_provider.getTransactionCount(that.DATO_wallet!.address);
-    var allPromises = Promise.all([
+    let gasPricePromise = that.DATO_provider.getGasPrice();
+    let balancePromise = that.DATO_provider.getBalance(that.DATO_wallet!.address)
+    let transactionCountPromise = that.DATO_provider.getTransactionCount(that.DATO_wallet!.address);
+    let allPromises = Promise.all([
       gasPricePromise,
       balancePromise,
       transactionCountPromise
     ]);
-    var sendPromise = allPromises.then(async function (results) {
-      var gasPrice = results[0];
-      var balance = results[1];
-      var transactionCount = results[2];
-      var txFeeInWei = gasPrice.mul(21000);
-      var value: BigNumber = balance.sub(txFeeInWei);
+    let sendPromise = allPromises.then(async function (results) {
+      let gasPrice = results[0];
+      let balance = results[1];
+      let transactionCount = results[2];
+      let txFeeInWei = gasPrice.mul(21000);
+      let value: BigNumber = balance.sub(txFeeInWei);
       //判断扣掉Gas手续费后 余额大于转账额度
       if (Number(ethers.utils.formatEther(value)) < amount) {
         console.dir("余额不足");
         return;
       }
-      var transaction = {
+      let transaction = {
         to: toAddress,
         gasPrice: gasPrice,
         gasLimit: 21000,
@@ -166,11 +211,11 @@ export class DatoWallet {
       console.dir("交易信息");
       console.dir(transaction);
       //签名后的交易
-      var signedTransaction = await that.DATO_wallet!.signTransaction(transaction);
+      let signedTransaction = await that.DATO_wallet!.signTransaction(transaction);
       //发送交易信息到网络
       return that.DATO_provider.sendTransaction(signedTransaction);
     });
-    var minedPromise = sendPromise.then(function (transaction) {
+    let minedPromise = sendPromise.then(function (transaction) {
       if (transaction) {
         //向网络成功发送交易信息
         console.dir("向网络成功发送交易信息")
@@ -188,13 +233,4 @@ export class DatoWallet {
       }
     });
   }
-
 }
-
-// let datoWallet = new DatoWallet("http://118.190.100.235:8545", 19851111);
-// //通过私钥创建新钱包
-// datoWallet.createWalletFromPrivateKey("0xc6e412e3a9ca838fa297241bdae3ab21e148571d7d2a9e316a60dd7813f45e9a");
-// //查询余额
-// datoWallet.getBalance();
-// //转账
-// datoWallet.transaction("0x8658c2D0754EADA6DC68177a333AE531C1967350", 1);

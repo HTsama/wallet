@@ -12,8 +12,8 @@
       :theme="value.value == 'mine' ? true : false"
     ></u-title>
     <u-body v-bind:bottom="56">
-      <u-wallet v-if="value.value == 'wallet'"></u-wallet>
-      <u-mine v-if="value.value == 'mine'"></u-mine>
+      <u-wallet v-show="value.value == 'wallet'" ref="wallet"></u-wallet>
+      <!-- <u-mine v-if="value.value == 'mine'"></u-mine> -->
     </u-body>
     <u-tabbar :list="tabbar" :value="value.value" @chose="loadPage"></u-tabbar>
   </div>
@@ -51,9 +51,20 @@ export default class Home extends Vue {
   beforeCreate() {
     console.log(this.WALLET_CONFIG);
   }
+  onShow() {
+    if ((this as any).$refs.wallet && this.value.value == "wallet") {
+      (this as any).$refs.wallet.init();
+    }
+  }
+  mounted() {
+    (this as any).$refs.wallet.init();
+  }
   loadPage(e: any) {
     this.$isServer;
     this.value = this.$utils.getObj(this.tabbar, "value", e.value);
+    if (this.value.value == "wallet") {
+      (this as any).$refs.wallet.init();
+    }
   }
 }
 </script>
