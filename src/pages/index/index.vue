@@ -39,6 +39,10 @@
     <div class="view-group card-view" v-if="status == 1">
       <div class="card">
         <p>我的资产</p>
+        <div class="my-address" @click="copy()">
+          {{ address }}
+          <div class="copy u-copy iconfont"></div>
+        </div>
         <p>
           {{ balance }}<span>{{ localwallet[walletIndex].info.type }}</span>
         </p>
@@ -52,14 +56,20 @@
             mode="aspectFit"
           />
         </div>
-        <div class="card-more">
+        <div class="card-bg-round"></div>
+        <div class="more" @click="goPage('wallet')">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <!-- <div class="card-more">
           <div class="card-more-list">
             转账
           </div>
           <div class="card-more-list">
             收款
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -79,6 +89,7 @@ export default class extends Vue {
   status = 0;
   //余额
   balance = "0.0";
+  address = "";
   init() {
     this.localwallet = uni.getStorageSync("wallet");
     this.walletIndex = uni.getStorageSync("walletIndex");
@@ -93,10 +104,22 @@ export default class extends Vue {
     if (DatoWallet) {
       this.handleQueryBalance(DatoWallet);
     }
+    return this.localwallet;
+  }
+  copy() {
+    uni.setClipboardData({
+      data: this.localwallet[this.walletIndex].wallet.address,
+    });
+    uni.showToast({
+      title: "复制钱包地址成功",
+      icon: "none",
+      duration: 2000,
+    });
   }
   // 创建服务
   creatServe() {
     if (this.localwallet) {
+      console.log(this.localwallet);
       const creatTyp: "DETO" | "ETH" = this.localwallet[this.walletIndex].info
         .type;
       const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
@@ -115,17 +138,66 @@ export default class extends Vue {
       creatIp,
       this.localwallet[this.walletIndex].wallet.address
     );
-    console.log(this.balance);
+    this.address =
+      this.localwallet[this.walletIndex].wallet.address.substring(0, 5) +
+      "******" +
+      this.localwallet[this.walletIndex].wallet.address.substring(37, 42);
   }
   goPage(type: string) {
-    uni.navigateTo({
-      url: "../creat/index?type=" + type,
-    });
+    if (type == "wallet") {
+      uni.navigateTo({
+        url: "../wallet-setting/index",
+      });
+    } else {
+      uni.navigateTo({
+        url: "../creat/index?type=" + type,
+      });
+    }
   }
 }
 </script>
 
 <style lang="scss">
+.copy {
+  color: #fff;
+  font-size: 32upx;
+  margin-left: 5upx;
+  width: 50upx;
+  height: 50upx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-bg-round {
+  width: 500upx;
+  height: 500upx;
+  background: rgba(255, 255, 255, 0.1);
+  right: -200upx;
+  top: -180upx;
+  position: absolute;
+  border-radius: 300upx;
+}
+.more {
+  position: absolute;
+  right: 0upx;
+  top: 0upx;
+  height: 100upx;
+  padding-right: 10upx;
+  padding-bottom: 30upx;
+  padding-top: 30upx;
+  box-sizing: border-box;
+  width: 60upx;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.more span {
+  width: 8upx;
+  height: 8upx;
+  background: #fff;
+  border-radius: 5upx;
+}
 .v-g {
   height: 100%;
 }
@@ -136,6 +208,14 @@ export default class extends Vue {
 .bg image {
   width: 100%;
   margin-top: 50upx;
+}
+.my-address {
+  font-size: 26upx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 10upx 30upx 20upx 30upx;
 }
 .btn-view-group {
   width: 750upx;
@@ -156,20 +236,19 @@ export default class extends Vue {
 }
 .card p {
   color: #fff;
-  font-size: 28upx;
-  padding: 30upx 30upx 10upx 30upx;
+  font-size: 32upx;
+  padding: 30upx 30upx 30upx 30upx;
 }
-.card p:nth-child(2) {
+.card p:nth-child(3) {
   font-size: 48upx;
   font-weight: bold;
 }
 .card-bg {
-  width: 200upx;
-  height: 200upx;
+  width: 100upx;
+  height: 100upx;
   position: absolute;
   right: 30upx;
-  top: 50%;
-  margin-top: -100upx;
+  bottom: 30upx;
 }
 .card-bg image {
   width: 100%;

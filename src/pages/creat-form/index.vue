@@ -21,6 +21,7 @@
               name="name"
               placeholder="请输入钱包名"
               @changevalue="changevalue"
+              @changekey="changekey"
             />
           </div>
           <div class="form-list-view">
@@ -30,6 +31,7 @@
               typeName="password"
               placeholder="密码不能少于8位"
               @changevalue="changevalue"
+              @changekey="changekey"
             />
           </div>
           <div class="form-list-view">
@@ -39,6 +41,7 @@
               typeName="password"
               placeholder="请再次输入密码"
               @changevalue="changevalue"
+              @changekey="changekey"
             />
           </div>
           <div class="form-list-view">
@@ -47,6 +50,7 @@
               name="tips"
               placeholder="请输入密码提示，可不填"
               @changevalue="changevalue"
+              @changekey="changekey"
             />
           </div>
         </div>
@@ -89,6 +93,7 @@ export default class CreateForm extends Vue {
   changevalue(e) {
     this.form[e.name] = e.value;
   }
+  changekey() {}
   creat() {
     if (!this.form.name || this.form.name == "") {
       uni.showToast({

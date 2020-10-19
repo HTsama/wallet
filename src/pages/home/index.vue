@@ -7,10 +7,21 @@
 -->
 <template>
   <div>
-    <u-title
-      v-bind:title="value.value == 'mine' ? value.title : ''"
-      :theme="value.value == 'mine' ? true : false"
-    ></u-title>
+    <u-title v-bind:title="value.value == 'mine' ? value.title : ''">
+      <code>
+        <div
+          class="home-title"
+          v-if="wallet.length > 0 && value.value != 'mine'"
+        >
+          <div class="logo">
+            <image src="../../static/logo.png" mode="aspectFit" />
+          </div>
+          <div class="title-btn">
+            <div class="u-add iconfont" @click="goPage('import')"></div>
+          </div>
+        </div>
+      </code>
+    </u-title>
     <u-body v-bind:bottom="56">
       <u-wallet v-show="value.value == 'wallet'" ref="wallet"></u-wallet>
       <!-- <u-mine v-if="value.value == 'mine'"></u-mine> -->
@@ -31,6 +42,7 @@ import uMine from "@/pages/mine/index.vue";
   },
 })
 export default class Home extends Vue {
+  wallet = [];
   value = {
     title: "资产",
     value: "wallet",
@@ -48,16 +60,21 @@ export default class Home extends Vue {
       icon: "mine",
     },
   ];
+  goPage(type: string) {
+    uni.navigateTo({
+      url: "../creat/index?type=" + type,
+    });
+  }
   beforeCreate() {
     console.log(this.WALLET_CONFIG);
   }
   onShow() {
     if ((this as any).$refs.wallet && this.value.value == "wallet") {
-      (this as any).$refs.wallet.init();
+      this.wallet = (this as any).$refs.wallet.init();
     }
   }
   mounted() {
-    (this as any).$refs.wallet.init();
+    this.wallet = (this as any).$refs.wallet.init();
   }
   loadPage(e: any) {
     this.$isServer;
@@ -68,3 +85,29 @@ export default class Home extends Vue {
   }
 }
 </script>
+<style lang="scss">
+.title-btn .u-add {
+  font-size: 48upx;
+  color: $main-color;
+}
+.logo {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.logo image {
+  width: 50%;
+  height: 50%;
+}
+.home-title {
+  display: flex;
+  width: calc(750upx - 60upx);
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 0 30upx;
+}
+</style>

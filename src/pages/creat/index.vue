@@ -15,7 +15,7 @@
           <p>钱包体系</p>
         </div>
         <div class="list-group">
-          <view class="list-view">
+          <view class="list-view" @click="creat('ETH')">
             <p>以太坊</p>
             <image
               class="list-image"
@@ -45,7 +45,14 @@ export default class Create extends Vue {
   title = "选择钱包体系";
   type = "creat";
   creat(e) {
-    console.log(e);
+    if (e == "ETH") {
+      uni.showToast({
+        title: "暂未开放",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
+    }
     if (this.type == "creat") {
       uni.navigateTo({
         url: "../creat-form/index?type=" + e,

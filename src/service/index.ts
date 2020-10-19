@@ -119,11 +119,11 @@ export class DatoWalletService {
   importWalletFromMnemonic(mnemonic: string) {
     let that = this;
     let mnemonicWallet = ethers.Wallet.fromMnemonic(mnemonic);
-    console.dir(mnemonicWallet);
-    console.dir(`地址: ${mnemonicWallet.address}`);
-    console.dir(`私钥: ${mnemonicWallet.privateKey}`);
-    console.dir(`公钥: ${mnemonicWallet.publicKey}`);
-    console.dir(`助记词: ${mnemonicWallet.mnemonic.phrase}`);
+    console.log(mnemonicWallet);
+    console.log(`地址: ${mnemonicWallet.address}`);
+    console.log(`私钥: ${mnemonicWallet.privateKey}`);
+    console.log(`公钥: ${mnemonicWallet.publicKey}`);
+    console.log(`助记词: ${mnemonicWallet.mnemonic.phrase}`);
     that.DATO_wallet = mnemonicWallet;
     return mnemonicWallet;
   }
@@ -135,10 +135,10 @@ export class DatoWalletService {
   importWalletFromPrivateKey(privateKey: string) {
     let that = this;
     let wallet = new ethers.Wallet(privateKey);
-    console.dir(wallet);
-    console.dir(`地址: ${wallet.address}`);
-    console.dir(`私钥: ${wallet.privateKey}`);
-    console.dir(`公钥: ${wallet.publicKey}`);
+    console.log(wallet);
+    console.log(`地址: ${wallet.address}`);
+    console.log(`私钥: ${wallet.privateKey}`);
+    console.log(`公钥: ${wallet.publicKey}`);
     that.DATO_wallet = wallet;
     return wallet;
   }

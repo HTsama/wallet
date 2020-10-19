@@ -17,7 +17,7 @@
     >
       <input
         :type="inputType"
-        :adjust-position="false"
+        :adjust-position="true"
         maxlength="-1"
         :cursor-spacing="0"
         :placeholder="placeholder"
@@ -67,6 +67,12 @@ export default class UInput extends Vue {
       value: e.detail.value,
     });
   }
+  // changeKeybord(e: any) {
+  //   this.$emit("changekey", e.detail.height + 50);
+  // }
+  // changeKeybordRes(e: any) {
+  //   this.$emit("changekey", 0);
+  // }
 }
 </script>
 <style lang="scss">

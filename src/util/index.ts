@@ -44,7 +44,11 @@ export const getBalance = async (url: string, address: string) => {
   (global as any).XMLHttpRequest = plus.net.XMLHttpRequest;
   // #endif
   (global as any).XMLHttpRequest = XMLHttpRequest;
+  // console.log(await new web3(url).eth.getAccounts());
+  console.log(await new web3(url).eth.getGasPrice())
   return ethers.utils.formatEther(await new web3(url).eth.getBalance(address))
+
+
 }
 export default <utilsInterface>{
   getObj: getObj,

@@ -85,6 +85,7 @@ export default class ImportKey extends Vue {
   walletInfo = {};
   localwallet = [];
   form = {};
+  bottom = 0;
   type = 0;
   onLoad(options) {
     this.type = options.type;
@@ -96,6 +97,9 @@ export default class ImportKey extends Vue {
   }
   changevalue(e) {
     this.form[e.name] = e.value;
+  }
+  changekey(e) {
+    this.bottom = e;
   }
   creat() {
     if (!this.form.name || this.form.name == "") {
