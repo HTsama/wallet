@@ -15,19 +15,17 @@
           <p>导入方式</p>
         </div>
         <div class="list-group">
-          <view class="list-view" @click="creat('DETO')">
+          <view class="list-view" @click="creat('DETO', 'k')">
             <p>私钥</p>
-            <!-- <image
-              class="list-image"
-              :src="require('../../static/home/yt.png')"
-              mode="aspectFit"
-            /> -->
+            <div class="list-icon iconfont icon u-key"></div>
           </view>
-          <view class="list-view" @click="creat('DETO')">
+          <view class="list-view" @click="creat('DETO', 'c')">
             <p>助记词</p>
+            <div class="list-icon iconfont icon u-abc"></div>
           </view>
-          <view class="list-view" @click="creat('DETO')">
+          <view class="list-view" @click="creat('DETO', 'j')">
             <p>Keystore</p>
+            <div class="list-icon iconfont icon u-json"></div>
           </view>
         </div>
       </div>
@@ -41,7 +39,15 @@ import { Component, Vue } from "vue-property-decorator";
 @Component()
 export default class ImportFun extends Vue {
   title = "选择导入方式";
-  creat(e) {
+  creat(e, f) {
+    if (f != "k") {
+      uni.showToast({
+        title: "暂未开放",
+        icon: "none",
+        duration: 2000,
+      });
+      return;
+    }
     uni.navigateTo({
       url: "../import-key/index?type=" + e,
     });
@@ -65,6 +71,16 @@ export default class ImportFun extends Vue {
   padding: 0 30upx;
   flex-direction: row;
   justify-content: space-between;
+}
+.list-icon {
+  font-size: 160upx;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  box-sizing: border-box;
+  color: rgba(255, 255, 255, 0.5);
+  margin-right: -40upx;
+  margin-bottom: -40upx;
 }
 .view-group {
   justify-content: flex-start;
@@ -95,6 +111,6 @@ export default class ImportFun extends Vue {
   justify-content: flex-start;
   box-sizing: border-box;
   padding: 30upx;
-  font-size: 32upx;
+  font-size: 38upx;
 }
 </style>

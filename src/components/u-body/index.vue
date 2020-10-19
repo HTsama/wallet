@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 
 @Component({
   props: {
@@ -47,6 +47,7 @@ import { Component, Vue } from "vue-property-decorator";
 })
 export default class UBody extends Vue {
   name = "u-body";
+  scrollTop = 0;
   phoneInfo = this.globalData;
 }
 </script>
@@ -62,9 +63,6 @@ export default class UBody extends Vue {
 .load-view {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   color: #333;
 }
 </style>
