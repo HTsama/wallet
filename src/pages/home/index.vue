@@ -22,9 +22,17 @@
         </div>
       </code>
     </u-title>
-    <u-body v-bind:bottom="56" v-bind:load="load" @onRefresh="onRefresh">
-      <u-wallet v-show="value.value == 'wallet'" ref="wallet"></u-wallet>
-      <!-- <u-mine v-if="value.value == 'mine'"></u-mine> -->
+    <u-body
+      v-bind:scroll="true"
+      v-bind:bottom="56"
+      v-bind:load="load"
+      @onRefresh="onRefresh"
+    >
+      <u-wallet
+        v-show="value.value == 'wallet'"
+        ref="wallet"
+        v-bind:status="status"
+      ></u-wallet>
     </u-body>
     <u-tabbar :list="tabbar" :value="value.value" @chose="loadPage"></u-tabbar>
   </div>
@@ -43,12 +51,13 @@ import uMine from "@/pages/mine/index.vue";
 })
 export default class Home extends Vue {
   wallet = [];
-  load = false;
+  load = true;
   value = {
     title: "资产",
     value: "wallet",
     icon: "wallet",
   };
+  status = 0;
   tabbar = [
     {
       title: "资产",
@@ -62,11 +71,9 @@ export default class Home extends Vue {
     },
   ];
   onRefresh(e: any) {
+    this.load = false;
     setTimeout(() => {
       this.load = true;
-      this.$nextTick(() => {
-        this.load = false;
-      });
     }, 1000);
   }
   goPage(type: string) {
@@ -79,17 +86,27 @@ export default class Home extends Vue {
   }
   onShow() {
     if ((this as any).$refs.wallet && this.value.value == "wallet") {
-      this.wallet = (this as any).$refs.wallet.init();
+      if (this.wallet.length > 0) {
+        this.status = 1;
+        (this as any).$refs.wallet.init();
+      }
     }
   }
   mounted() {
-    this.wallet = (this as any).$refs.wallet.init();
+    this.wallet = uni.getStorageSync("wallet");
+    if (this.wallet.length > 0) {
+      this.status = 1;
+      (this as any).$refs.wallet.init();
+    }
   }
   loadPage(e: any) {
     this.$isServer;
     this.value = this.$utils.getObj(this.tabbar, "value", e.value);
     if (this.value.value == "wallet") {
       (this as any).$refs.wallet.init();
+      if (this.wallet.length > 0) {
+        this.status = 1;
+      }
     }
   }
 }
