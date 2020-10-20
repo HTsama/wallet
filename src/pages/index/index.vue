@@ -9,7 +9,7 @@
   <div class="v-g">
     <div class="view-group" v-if="status == 0">
       <div class="view-title">
-        <p>创建你的</p>
+        <p>创建你的{{ status }}</p>
         <p>第一个数字钱包</p>
       </div>
       <div class="bg">
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="view-group card-view" v-if="status == 1">
+    <div class="view-group card-view" v-if="status == 1 && address != ''">
       <div class="card">
         <p>我的资产</p>
         <div class="my-address" @click="copy()">
@@ -76,35 +76,33 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { DatoWalletService } from "../../service/index";
 import uWallet from "@/pages/index/index.vue";
 
-@Component
+@Component({
+  props: {
+    status: {
+      type: Number,
+      default: 0,
+    },
+  },
+})
 export default class extends Vue {
   name = "u-wallet";
   localwallet: Array<any> = [];
   walletIndex = 0;
-  // 钱包状态
-  status = 0;
   //余额
   balance = "0.0";
   address = "";
-  init() {
+  async init() {
     this.localwallet = uni.getStorageSync("wallet");
     this.walletIndex = uni.getStorageSync("walletIndex");
-    if (this.localwallet.length > 0) {
-      this.status = 1;
-    }
     if (!this.walletIndex) {
       this.walletIndex = 0;
       uni.setStorageSync("walletIndex", this.walletIndex);
     }
-    const DatoWallet = this.creatServe();
-    if (DatoWallet) {
-      this.handleQueryBalance(DatoWallet);
-    }
-    return this.localwallet;
+    this.handleQueryBalance();
   }
   copy() {
     uni.setClipboardData({
@@ -130,10 +128,11 @@ export default class extends Vue {
     }
   }
   // 获取余额
-  async handleQueryBalance(DatoWallet: DatoWalletService) {
+  async handleQueryBalance() {
     const creatTyp: "DETO" | "ETH" = this.localwallet[this.walletIndex].info
       .type;
     const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
+
     this.balance = await this.$utils.getBalance(
       creatIp,
       this.localwallet[this.walletIndex].wallet.address

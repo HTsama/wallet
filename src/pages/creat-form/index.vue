@@ -7,7 +7,7 @@
 -->
 <template>
   <div>
-    <u-title :title="title" :theme="false"></u-title>
+    <u-title :theme="false"></u-title>
     <u-body>
       <div class="view-group">
         <div class="view-title">
