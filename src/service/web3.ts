@@ -35,10 +35,10 @@ export class DatoWalletService {
 
   /**
    * 转账
-   * @param fromAddr 
-   * @param toAddr 
-   * @param privateKey 
-   * @param amount 
+   * @param fromAddr 发件人
+   * @param toAddr 收件人
+   * @param privateKey 发件人私钥
+   * @param amount 钱
    */
   async transaction(fromAddr: string, toAddr: string, privateKey: string, amount: string) {
     // 查询from账户以太币余额
@@ -95,7 +95,7 @@ export class DatoWalletService {
         console.log(`交易状态: ${receipt.status}`); // TRUE如果交易成功，FALSE则EVM还原了交易。
         console.log(`块哈希: ${receipt.blockHash}`); // T此事务所在的块的哈希。
         console.log(`块号: ${receipt.blockNumber}`); // 此事务所在的块的哈希。
-        console.log(`交易的哈希值: ${receipt.transactionHash}`); // 交易的哈希值。
+        console.log(`交易的哈希值: ${receipt.transactionHash}`); // 交易的哈希值。·
         console.log(`交易索引: ${receipt.transactionIndex}`); // 块中交易索引位置的整数。
         console.log(`发件人地址: ${receipt.from}`); // 发件人地址。
         console.log(`接收方地址: ${receipt.to}`); // 接收方地址。null当它是合同创建交易时。
