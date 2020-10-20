@@ -67,12 +67,6 @@ export default class UInput extends Vue {
       value: e.detail.value,
     });
   }
-  // changeKeybord(e: any) {
-  //   this.$emit("changekey", e.detail.height + 50);
-  // }
-  // changeKeybordRes(e: any) {
-  //   this.$emit("changekey", 0);
-  // }
 }
 </script>
 <style lang="scss">

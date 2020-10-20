@@ -22,7 +22,7 @@
         </div>
       </code>
     </u-title>
-    <u-body v-bind:bottom="56">
+    <u-body v-bind:bottom="56" v-bind:load="load" @onRefresh="onRefresh">
       <u-wallet v-show="value.value == 'wallet'" ref="wallet"></u-wallet>
       <!-- <u-mine v-if="value.value == 'mine'"></u-mine> -->
     </u-body>
@@ -43,6 +43,7 @@ import uMine from "@/pages/mine/index.vue";
 })
 export default class Home extends Vue {
   wallet = [];
+  load = false;
   value = {
     title: "资产",
     value: "wallet",
@@ -60,6 +61,14 @@ export default class Home extends Vue {
       icon: "mine",
     },
   ];
+  onRefresh(e: any) {
+    setTimeout(() => {
+      this.load = true;
+      this.$nextTick(() => {
+        this.load = false;
+      });
+    }, 1000);
+  }
   goPage(type: string) {
     uni.navigateTo({
       url: "../creat/index?type=" + type,
