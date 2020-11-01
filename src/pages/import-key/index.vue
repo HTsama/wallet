@@ -145,26 +145,22 @@ export default class ImportKey extends Vue {
       this.walletInfo = this.DatoWallet.importWalletFromPrivateKey(
         this.form.key
       );
-      if (!this.localwallet) {
-        this.localwallet = [];
-      }
-      this.localwallet = [
-        ...this.localwallet,
-        ...[
-          {
-            info: {
-              name: this.form.name,
-              password: this.form.password,
-              tips: this.form.tips,
-              type: this.type,
-            },
-            wallet: this.walletInfo,
-          },
-        ],
-      ];
-      uni.setStorageSync("wallet", this.localwallet);
-      uni.navigateBack({
-        delta: 3,
+      let walletJson = {
+        info: {
+          name: this.form.name,
+          password: this.form.password,
+          tips: this.form.tips,
+          type: this.type,
+        },
+        wallet: {
+          address: this.walletInfo.address,
+          mnemonic: this.walletInfo.mnemonic,
+          privateKey: this.walletInfo.privateKey,
+          publicKey: this.walletInfo.publicKey,
+        },
+      };
+      uni.navigateTo({
+        url: "../rem-words/index?v=" + JSON.stringify(walletJson),
       });
     }
   }
