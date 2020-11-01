@@ -14,6 +14,8 @@ export interface utilsInterface {
   /** 获取数组中某key和某值对等的对象 */
   getObj: (arg0: Array<any>, arg1: String, arg2: String) => any;
   getBalance: (arg0: Object, arg1: String) => any;
+  load: () => any,
+  throttle: (arg0: any, arg1: any) => any
 }
 
 export interface WalletConfigInterface {

@@ -9,6 +9,9 @@ import web3 from 'web3';
 import { BigNumber, ethers, providers, Wallet } from 'ethers';
 import { utilsInterface } from "../core/interface";
 let globalData = {
+  gapTime: null,
+  lastTime: null,
+  lastTime: null,
   isObject: (obj: any) => {
     return Object.prototype.toString.call(obj) === "[object Object]"
   }
@@ -44,14 +47,25 @@ export const getBalance = async (url: string, address: string) => {
   (global as any).XMLHttpRequest = plus.net.XMLHttpRequest;
   // #endif
   (global as any).XMLHttpRequest = XMLHttpRequest;
-  // console.log(await new web3(url).eth.getAccounts());
-  console.log(await new web3(url).eth.getGasPrice())
   return ethers.utils.formatEther(await new web3(url).eth.getBalance(address))
+}
 
+export const load = () => {
+  return {
+    show() {
+      (this as any).show = function () {
+        let d = document.createElement('div');
+        d.setAttribute('class', 'load-g')
+        document.body.appendChild(d);
+      }
+    }
+  };
 
 }
+
 export default <utilsInterface>{
   getObj: getObj,
   getValue: getValue,
-  getBalance: getBalance
+  getBalance: getBalance,
+  load: load,
 }

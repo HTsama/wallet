@@ -4,48 +4,81 @@
       "path": "pages/home/index",
       "style": {
         "titleNView": false,
-        "app-plus": {}
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     },
     {
       "path": "pages/index/index",
       "style": {
         "titleNView": false,
-        "app-plus": {}
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     },
     {
       "path": "pages/mine/index",
       "style": {
-        "titleNView": false
+        "titleNView": false,
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     },
     {
       "path": "pages/creat/index",
       "style": {
         "titleNView": false,
-        "app-plus": {}
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     },
     {
       "path": "pages/creat-form/index",
       "style": {
         "titleNView": false,
-        "app-plus": {}
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     },
     {
       "path": "pages/import-fun/index",
       "style": {
         "titleNView": false,
-        "app-plus": {}
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     },
     {
       "path": "pages/import-key/index",
       "style": {
         "titleNView": false,
-        "app-plus": {}
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/rem-words/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "pages/edit-words/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {
+          "bounce": "none"
+        }
       }
     }
   ],

@@ -78,6 +78,7 @@ export default class UInput extends Vue {
   display: flex;
   align-items: center;
   font-weight: bold;
+  flex-direction: row;
   font-size: 30upx;
 }
 .form-list-title span {

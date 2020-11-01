@@ -33,6 +33,7 @@
         ref="wallet"
         v-bind:status="status"
       ></u-wallet>
+      <u-mine v-show="value.value == 'mine'"></u-mine>
     </u-body>
     <u-tabbar :list="tabbar" :value="value.value" @chose="loadPage"></u-tabbar>
   </div>
@@ -73,8 +74,10 @@ export default class Home extends Vue {
   onRefresh(e: any) {
     this.load = false;
     setTimeout(() => {
-      this.load = true;
-    }, 1000);
+      this.$nextTick(() => {
+        this.load = true;
+      });
+    }, 500);
   }
   goPage(type: string) {
     uni.navigateTo({

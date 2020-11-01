@@ -1,23 +1,36 @@
 <template>
-  <view class="content">
-    <div>钱包信息：{{ walletInfo.address }}</div>
-    <div>余额：{{ balance }}</div>
-    <div>助记词：{{ mnemonic }}</div>
-    <button @click="handleCreateWallet()" style="margin-bottom: 10px">
-      随机创建钱包
-    </button>
-    <button @click="handleCreateWallet('Mnemonic')" style="margin-bottom: 10px">
-      助记词创建钱包
-    </button>
-    <button
-      @click="handleCreateWallet('PrivateKey')"
-      style="margin-bottom: 10px"
-    >
-      私钥创建钱包
-    </button>
-
-    <button @click="handleQueryBalance">查询余额</button>
-  </view>
+  <div class="content">
+    <div class="content-g">
+      <div
+        class="content-list"
+        v-for="(item, index) in listA"
+        v-bind:key="index"
+      >
+        <div class="content-icon">
+          <image :src="item.icon" mode="aspectFit" />
+        </div>
+        <div class="content-font">
+          <span>{{ item.title }}</span>
+          <div class="back u-arrow-left iconfont"></div>
+        </div>
+      </div>
+    </div>
+    <div class="content-g">
+      <div
+        class="content-list"
+        v-for="(item, index) in listB"
+        v-bind:key="index"
+      >
+        <div class="content-icon">
+          <image :src="item.icon" mode="aspectFit" />
+        </div>
+        <div class="content-font">
+          <span>{{ item.title }}</span>
+          <div class="back u-arrow-left iconfont"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -26,58 +39,83 @@ import { DatoWalletService } from "../../service/index";
 
 @Component
 export default class Mine extends Vue {
-  // balance = "0";
-  // mnemonic = "";
-  // DatoWallet = new DatoWalletService("http://118.190.100.235:8545", 19851111); // DATO钱包对象
-  // walletInfo = {};
-  // handleCreateWallet(action: any) {
-  //   if (!action) {
-  //     this.walletInfo = this.DatoWallet.createWallet();
-  //     console.log(this.walletInfo);
-  //   }
-  //   if (action === "Mnemonic") {
-  //     // 随机生成助记词
-  //     const m = "";
-  //     this.mnemonic = m;
-  //     this.walletInfo = this.DatoWallet.importWalletFromMnemonic(m);
-  //   }
-  //   if (action === "PrivateKey") {
-  //     // 根据私钥
-  //     const privateKey = "";
-  //     this.walletInfo = this.DatoWallet.importWalletFromPrivateKey(privateKey);
-  //   }
-  // }
-  // handleQueryBalance() {
-  //   this.DatoWallet.getBalance().then((balance: string) => {
-  //     if (balance) {
-  //       this.balance = balance;
-  //     }
-  //   });
-  // }
+  listA = [
+    {
+      title: "钱包管理",
+      icon: "../../static/mine/2.png",
+    },
+    {
+      title: "交易记录",
+      icon: "../../static/mine/3.png",
+    },
+    {
+      title: "地址簿",
+      icon: "../../static/mine/4.png",
+    },
+  ];
+  listB = [
+    {
+      title: "关于我们",
+      icon: "../../static/mine/7.png",
+    },
+  ];
 }
 </script>
 
 <style>
 .content {
   display: flex;
+  align-items: flex-start;
+  background: #f5f5f5;
+  height: 100%;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin: 200rpx auto 50rpx auto;
-}
-
-.text-area {
+.content-icon {
   display: flex;
   justify-content: center;
+  align-items: center;
+  width: 80upx;
+  height: 125upx;
 }
-
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
+.content-icon image {
+  width: 50%;
+  height: 100%;
+}
+.content-g {
+  width: 690upx;
+  height: auto;
+  margin: 30upx 30upx 0 30upx;
+  background: #fff;
+  border-radius: 10upx;
+}
+.content-font {
+  border-bottom: 1px solid #efefef;
+  height: 125upx;
+  width: calc(100% - 100upx);
+  margin-left: 20upx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 20upx 0 0;
+}
+.content-font .u-arrow-left {
+  transform: rotate(180deg);
+  font-size: 26upx;
+  color: #999;
+}
+.content-list:last-child .content-font {
+  border-bottom: 0;
+}
+.content-list {
+  width: 100%;
+  height: 125upx;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  padding: 20upx 0 20upx 20upx;
+  font-size: 30upx;
+  align-items: center;
 }
 </style>
