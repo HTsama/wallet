@@ -20,7 +20,7 @@ export class DatoWalletService {
     let account = this._web3.eth.accounts.create();
     let address = account.address;
     let privateKey = account.privateKey;
-    return
+    return account
   }
 
   /**

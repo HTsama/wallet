@@ -91,13 +91,13 @@
       scroll-y
       :class="'body-view ' + (bottom == 0 ? 'bottom' : '')"
       :style="{
-        marginTop: '90px',
+        top: phoneInfo.statusBarHeight + 44 + 'px',
         height:
           phoneInfo.screenHeight -
           top -
+          phoneInfo.statusBarHeight -
           bottom -
-          phoneInfo.safeAreaInsets.bottom -
-          phoneInfo.statusBarHeight +
+          phoneInfo.safeAreaInsets.bottom +
           'px',
       }"
     >
@@ -119,7 +119,7 @@ import { Component, Vue, Watch } from "vue-property-decorator";
     },
     load: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     top: {
       type: Number,
@@ -145,8 +145,8 @@ export default class UBody extends Vue {
   y = -45;
   @Watch("load")
   onChangeValue(newVal: Boolean, oldVal: Boolean) {
-    this.y = newVal ? 0 : 45;
-    this.isLoad = newVal ? 4 : 3;
+    this.y = newVal ? -45 : 45;
+    this.isLoad = newVal ? 1 : 3;
   }
   touchend() {
     if (this.isLoad >= 3) {
@@ -159,7 +159,7 @@ export default class UBody extends Vue {
     } else if (this.isLoad == 1) {
       this.y = 45;
       this.$nextTick(() => {
-        this.y = 0;
+        this.y = -45;
       });
     }
   }
@@ -177,6 +177,7 @@ export default class UBody extends Vue {
 <style lang="scss">
 .body-view {
   width: 750upx;
+  position: fixed;
   box-sizing: border-box;
 }
 .body-view.screen {

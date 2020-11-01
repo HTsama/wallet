@@ -9,7 +9,7 @@
   <div class="v-g">
     <div class="view-group" v-if="status == 0">
       <div class="view-title">
-        <p>创建你的{{ status }}</p>
+        <p>创建你的</p>
         <p>第一个数字钱包</p>
       </div>
       <div class="bg">
@@ -102,7 +102,9 @@ export default class extends Vue {
       this.walletIndex = 0;
       uni.setStorageSync("walletIndex", this.walletIndex);
     }
-    this.handleQueryBalance();
+    if ((this as any).localwallet != "") {
+      this.handleQueryBalance();
+    }
   }
   copy() {
     uni.setClipboardData({
@@ -117,7 +119,6 @@ export default class extends Vue {
   // 创建服务
   creatServe() {
     if (this.localwallet) {
-      console.log(this.localwallet);
       const creatTyp: "DETO" | "ETH" = this.localwallet[this.walletIndex].info
         .type;
       const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;

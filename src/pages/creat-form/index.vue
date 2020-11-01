@@ -129,26 +129,23 @@ export default class CreateForm extends Vue {
       return;
     } else {
       this.walletInfo = this.DatoWallet.createWallet();
-      if (!this.localwallet) {
-        this.localwallet = [];
-      }
-      this.localwallet = [
-        ...this.localwallet,
-        ...[
-          {
-            info: {
-              name: this.form.name,
-              password: this.form.password,
-              tips: this.form.tips,
-              type: this.type,
-            },
-            wallet: this.walletInfo,
-          },
-        ],
-      ];
-      uni.setStorageSync("wallet", this.localwallet);
-      uni.navigateBack({
-        delta: 2,
+
+      let walletJson = {
+        info: {
+          name: this.form.name,
+          password: this.form.password,
+          tips: this.form.tips,
+          type: this.type,
+        },
+        wallet: {
+          address: this.walletInfo.address,
+          mnemonic: this.walletInfo.mnemonic,
+          privateKey: this.walletInfo.privateKey,
+          publicKey: this.walletInfo.publicKey,
+        },
+      };
+      uni.navigateTo({
+        url: "../rem-words/index?v=" + JSON.stringify(walletJson),
       });
     }
   }
