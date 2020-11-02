@@ -36,40 +36,66 @@
         </div>
       </div>
     </div>
-    <div class="view-group card-view" v-if="status == 1 && address != ''">
-      <div class="card">
-        <p>我的资产</p>
-        <div class="my-address" @click="copy()">
-          {{ address }}
-          <div class="copy u-copy iconfont"></div>
-        </div>
-        <p>
-          {{ balance }}<span>{{ localwallet[walletIndex].info.type }}</span>
-        </p>
-        <div class="card-bg">
-          <image
-            :src="
-              '../../static/home/card/' +
-                localwallet[walletIndex].info.type +
-                '.png'
-            "
-            mode="aspectFit"
-          />
-        </div>
-        <div class="card-bg-round"></div>
-        <div class="more" @click="goPage('wallet')">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <!-- <div class="card-more">
-          <div class="card-more-list">
-            转账
+    <div class="view-group card-view" v-if="status == 1">
+      <swiper
+        class="swiper card-g"
+        :indicator-dots="true"
+        :current="walletIndex"
+        @change="changeIndex"
+        indicator-color="rgba(42,124,255,0.5)"
+        indicator-active-color="#2a7cff"
+      >
+        <swiper-item
+          class="sw-list"
+          v-for="(item, index) in localwallet"
+          v-bind:key="index"
+        >
+          <div class="card">
+            <p>我的资产</p>
+            <div class="my-address" @click="copy(index)">
+              {{ walletAny[index].address }}
+              <div class="copy u-copy iconfont"></div>
+            </div>
+            <p>
+              {{ walletAny[index].balance
+              }}<span>{{ localwallet[index].info.type }}</span>
+            </p>
+            <div class="card-bg">
+              <image
+                :src="
+                  '../../static/home/card/' +
+                    localwallet[index].info.type +
+                    '.png'
+                "
+                mode="aspectFit"
+              />
+            </div>
+            <div class="card-bg-round"></div>
+            <div class="more" @click="goPage('wallet')">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </div>
-          <div class="card-more-list">
-            收款
-          </div>
-        </div> -->
+        </swiper-item>
+      </swiper>
+      <div class="card-more">
+        <div class="card-more-list">
+          <div class="card-list-icon wl"></div>
+          钱包
+        </div>
+        <div class="card-more-list">
+          <div class="card-list-icon txl"></div>
+          地址簿
+        </div>
+        <div class="card-more-list">
+          <div class="card-list-icon zz"></div>
+          转账
+        </div>
+        <div class="card-more-list">
+          <div class="card-list-icon sk"></div>
+          收款
+        </div>
       </div>
     </div>
   </div>
@@ -92,9 +118,8 @@ export default class extends Vue {
   name = "u-wallet";
   localwallet: Array<any> = [];
   walletIndex = 0;
-  //余额
-  balance = "0.0";
-  address = "";
+
+  walletAny: any = [];
   async init() {
     this.localwallet = uni.getStorageSync("wallet");
     this.walletIndex = uni.getStorageSync("walletIndex");
@@ -103,18 +128,28 @@ export default class extends Vue {
       uni.setStorageSync("walletIndex", this.walletIndex);
     }
     if ((this as any).localwallet != "") {
-      this.handleQueryBalance();
+      for (let k = 0; k < this.localwallet.length; k++) {
+        this.walletAny.push({
+          //余额
+          balance: "0.0",
+          address: "",
+        });
+        this.handleQueryBalance(k);
+      }
     }
   }
-  copy() {
+  copy(index: number) {
     uni.setClipboardData({
-      data: this.localwallet[this.walletIndex].wallet.address,
+      data: this.localwallet[index].wallet.address,
     });
     uni.showToast({
       title: "复制钱包地址成功",
       icon: "none",
       duration: 2000,
     });
+  }
+  changeIndex(e: any) {
+    uni.setStorageSync("walletIndex", e.detail.current);
   }
   // 创建服务
   creatServe() {
@@ -129,19 +164,18 @@ export default class extends Vue {
     }
   }
   // 获取余额
-  async handleQueryBalance() {
-    const creatTyp: "DETO" | "ETH" = this.localwallet[this.walletIndex].info
-      .type;
+  async handleQueryBalance(index: number) {
+    const creatTyp: "DETO" | "ETH" = this.localwallet[index].info.type;
     const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
 
-    this.balance = await this.$utils.getBalance(
+    this.walletAny[index].balance = await this.$utils.getBalance(
       creatIp,
-      this.localwallet[this.walletIndex].wallet.address
+      this.localwallet[index].wallet.address
     );
-    this.address =
-      this.localwallet[this.walletIndex].wallet.address.substring(0, 5) +
+    this.walletAny[index].address =
+      this.localwallet[index].wallet.address.substring(0, 5) +
       "******" +
-      this.localwallet[this.walletIndex].wallet.address.substring(37, 42);
+      this.localwallet[index].wallet.address.substring(37, 42);
   }
   goPage(type: string) {
     if (type == "wallet") {
@@ -158,6 +192,12 @@ export default class extends Vue {
 </script>
 
 <style lang="scss">
+.card-list-icon {
+  width: 100upx;
+  border-radius: 100%;
+  background-size: auto 75% !important;
+  height: 100upx;
+}
 .copy {
   color: #fff;
   font-size: 32upx;
@@ -217,6 +257,10 @@ export default class extends Vue {
   color: rgba(255, 255, 255, 0.8);
   margin: 10upx 30upx 20upx 30upx;
 }
+.chose {
+  color: #fff;
+  font-size: 24upx;
+}
 .btn-view-group {
   width: 750upx;
   height: 230upx;
@@ -226,10 +270,15 @@ export default class extends Vue {
   align-items: center;
   margin-bottom: 30rpx;
 }
+.card-g {
+  width: 750upx;
+  height: 400upx;
+}
 .card {
   width: 690upx;
   position: relative;
   margin-top: 30upx;
+  margin-left: 30upx;
   height: 300upx;
   border-radius: 20upx;
   background: linear-gradient(to right bottom, $main-color, $main-color-opac);
@@ -256,40 +305,37 @@ export default class extends Vue {
 }
 .view-group.card-view {
   justify-content: flex-start;
+  background: #f5f5f5;
 }
 .card p span {
   font-size: 32upx;
   margin-left: 20upx;
 }
 .card-more {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  left: 0;
+  width: calc(100% - 60upx);
+  box-sizing: border-box;
+  margin: 10upx 30upx;
   display: flex;
   flex-direction: row;
+  border-radius: 20upx;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  height: 80upx;
+  flex-wrap: wrap;
+  background: #fff;
+  justify-content: space-between;
 }
 .card-more-list {
-  font-size: 28upx;
-  color: #fff;
   flex: 1;
+  height: 210upx;
+  border-radius: 16upx;
+  font-size: 26upx;
+  color: #666;
   display: flex;
   align-items: center;
-  position: relative;
   justify-content: center;
-}
-.card-more-list::after {
-  position: absolute;
-  right: 0;
-  width: 2upx;
-  height: 26upx;
-  top: 50%;
-  margin-top: -13upx;
-  background: #fff;
-  content: "";
+  flex-direction: column;
+  box-sizing: border-box;
+  float: left;
+  position: relative;
 }
 .card-more-list:last-child::after {
   display: none;

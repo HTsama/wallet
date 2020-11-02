@@ -88,6 +88,7 @@ export default class Home extends Vue {
     console.log(this.WALLET_CONFIG);
   }
   onShow() {
+    this.wallet = uni.getStorageSync("wallet");
     if ((this as any).$refs.wallet && this.value.value == "wallet") {
       if (this.wallet.length > 0) {
         this.status = 1;

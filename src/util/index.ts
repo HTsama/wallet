@@ -9,9 +9,6 @@ import web3 from 'web3';
 import { BigNumber, ethers, providers, Wallet } from 'ethers';
 import { utilsInterface } from "../core/interface";
 let globalData = {
-  gapTime: null,
-  lastTime: null,
-  lastTime: null,
   isObject: (obj: any) => {
     return Object.prototype.toString.call(obj) === "[object Object]"
   }

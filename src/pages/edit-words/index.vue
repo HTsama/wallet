@@ -133,7 +133,9 @@ export default class EditWords extends Vue {
       }
       this.localwallet = [...this.localwallet, ...[this.v]];
       uni.setStorageSync("wallet", this.localwallet);
-      uni.reLaunch("../home/index");
+      uni.navigateBack({
+        delta: 5,
+      });
     }
   }
   rand(array) {
