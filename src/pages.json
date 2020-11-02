@@ -89,6 +89,15 @@
           "bounce": "none"
         }
       }
+    },
+    {
+      "path": "pages/q-code/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
     }
   ],
   "globalStyle": {

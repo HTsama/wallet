@@ -51,7 +51,7 @@
           v-bind:key="index"
         >
           <div class="card">
-            <p>我的资产</p>
+            <p>我的钱包</p>
             <div class="my-address" @click="copy(index)">
               {{ walletAny[index].address }}
               <div class="copy u-copy iconfont"></div>
@@ -81,7 +81,7 @@
       </swiper>
       <div class="card-more">
         <div class="card-more-list">
-          <div class="card-list-icon wl" @click="goUrl('../demo/index')"></div>
+          <div class="card-list-icon wl"></div>
           钱包
         </div>
         <div class="card-more-list">
@@ -93,33 +93,36 @@
           转账
         </div>
         <div class="card-more-list">
-          <div class="card-list-icon sk"></div>
+          <div
+            class="card-list-icon sk"
+            @click="goUrl('../q-code/index', 'wallet')"
+          ></div>
           收款
         </div>
       </div>
-      <div
-        style="width: 100%;"
-        v-for="(item, index) in moneyArr"
-        v-bind:key="index"
-      >
-        <div class="card-more" v-show="item.money != 0">
-          <div class="card-title">
-            <div class="card-icon">
-              <image
-                :src="'../../static/home/logo/' + item.title + '.png'"
-                mode="aspectFit"
-              />
+      <div class="card-more" style="margin-top: 20upx">
+        <p class="mt" v-show="moneyArr[0].money != 0 || moneyArr[1].money != 0">
+          我的资产
+        </p>
+        <div
+          style="width: 100%;"
+          v-for="(item, index) in moneyArr"
+          v-bind:key="index"
+        >
+          <div class="card-more" v-if="item.money != 0">
+            <div class="card-title">
+              <div class="card-icon">
+                <image
+                  :src="'../../static/home/logo/' + item.title + '.png'"
+                  mode="aspectFit"
+                />
+              </div>
+              {{ item.title }}
             </div>
-            {{ item.title }}
+            <div class="card-money">{{ item.money }}</div>
           </div>
-          <div class="card-money">{{ item.money }}</div>
         </div>
       </div>
-      <tki-qrcode
-        :loadMake="true"
-        val="0x0697f327eBc6D0EDC820BA0bac2a89D2EEC03C0b"
-        @result="qrR"
-      />
     </div>
   </div>
 </template>
@@ -151,9 +154,6 @@ export default class extends Vue {
       money: 0,
     },
   ];
-  qrR(e: any) {
-    console.log(e);
-  }
   async init() {
     this.localwallet = uni.getStorageSync("wallet");
     this.walletIndex = uni.getStorageSync("walletIndex");
@@ -161,6 +161,16 @@ export default class extends Vue {
       this.walletIndex = 0;
       uni.setStorageSync("walletIndex", this.walletIndex);
     }
+    this.moneyArr = [
+      {
+        title: "ETH",
+        money: 0,
+      },
+      {
+        title: "DETO",
+        money: 0,
+      },
+    ];
     if ((this as any).localwallet != "") {
       this.localwallet.forEach(async (item, index) => {
         let that = this;
@@ -199,6 +209,7 @@ export default class extends Vue {
   }
   changeIndex(e: any) {
     uni.setStorageSync("walletIndex", e.detail.current);
+    this.walletIndex = uni.getStorageSync("walletIndex");
   }
   // 创建服务
   creatServe() {
@@ -249,7 +260,16 @@ export default class extends Vue {
       });
     }
   }
-  goUrl(e: string) {
+  goUrl(e: string, type: string) {
+    if (type) {
+      if (type == "wallet") {
+        uni.navigateTo({
+          url:
+            e + "?wallet=" + JSON.stringify(this.localwallet[this.walletIndex]),
+        });
+      }
+      return;
+    }
     uni.navigateTo({
       url: e,
     });
@@ -276,6 +296,17 @@ export default class extends Vue {
   padding: 0 30upx;
   color: #333;
   font-size: 28upx;
+}
+.mt {
+  height: 100upx;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 30upx;
+  font-size: 34upx;
+  color: $main-color;
 }
 .card-icon {
   width: 60upx;
@@ -422,6 +453,10 @@ export default class extends Vue {
   flex-wrap: wrap;
   background: #fff;
   justify-content: space-between;
+}
+.card-more .card-more {
+  width: 100%;
+  margin: 0;
 }
 .card-more-list {
   flex: 1;

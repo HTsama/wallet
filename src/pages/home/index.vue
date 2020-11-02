@@ -75,6 +75,10 @@ export default class Home extends Vue {
     this.load = false;
     setTimeout(() => {
       this.$nextTick(() => {
+        if (this.wallet.length > 0) {
+          this.status = 1;
+          (this as any).$refs.wallet.init();
+        }
         this.load = true;
       });
     }, 500);
