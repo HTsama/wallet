@@ -13,7 +13,16 @@ export default class Demo extends Vue {
   onLoad() {
     console.log("load!!!");
     this.DatoWallet = new DatoWalletService("http://118.190.100.235:8545");
-    this.DatoWallet.createWallet("12345678");
+    const walt = this.DatoWallet.createWallet("12345678");
+
+    // 导入助记词
+    this.DatoWallet.importWalletFromMnemonic(walt.mnemonic);
+
+    // 导入keystore
+    this.DatoWallet.importWalletFromKeyStore(
+      JSON.stringify(walt.keystore),
+      "12345678"
+    );
   }
 }
 </script>
