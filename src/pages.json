@@ -80,6 +80,15 @@
           "bounce": "none"
         }
       }
+    },
+    {
+      "path": "pages/demo/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
     }
   ],
   "globalStyle": {

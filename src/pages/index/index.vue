@@ -81,7 +81,7 @@
       </swiper>
       <div class="card-more">
         <div class="card-more-list">
-          <div class="card-list-icon wl"></div>
+          <div class="card-list-icon wl" @click="goUrl('../demo/index')"></div>
           钱包
         </div>
         <div class="card-more-list">
@@ -187,6 +187,11 @@ export default class extends Vue {
         url: "../creat/index?type=" + type,
       });
     }
+  }
+  goUrl(e: string) {
+    uni.navigateTo({
+      url: e,
+    });
   }
 }
 </script>
