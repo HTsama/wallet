@@ -23,6 +23,7 @@ export class DatoWalletService {
    * @returns 
    */
   createWallet(password: string) {
+    console.log('创建钱包 !!!')
     // 生成助记词
     const entropy = crypto.randomBytes(16);
     const mnemonic = entropyToMnemonic(entropy);
@@ -40,11 +41,11 @@ export class DatoWalletService {
     const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
     // 根据私钥和密码（用户输入的）获取 加密的json
     const keystore = this._web3.eth.accounts.encrypt(privateKey, password)
-    // console.log(`地址: ${account.address}`);
-    // console.log(`私钥: ${privateKey}`);
-    // console.log(`公钥: ${publicKey}`);
-    // console.log(`助记词: ${mnemonic}`);
-    // console.log(`KeyStore: ${JSON.stringify(keystore)}`);
+    console.log(`地址: ${account.address}`);
+    console.log(`私钥: ${privateKey}`);
+    console.log(`公钥: ${publicKey}`);
+    console.log(`助记词: ${mnemonic}`);
+    console.log(`KeyStore: ${JSON.stringify(keystore)}`);
     return {
       mnemonic: mnemonic,
       privateKey: privateKey,
@@ -55,14 +56,72 @@ export class DatoWalletService {
   }
 
   /**
-   * 通过私钥导入钱包
+   * 通过私钥和密码导入钱包
    * @param privateKey 
+   * @param password 
    */
-  importWalletFromPrivateKey(privateKey: string) {
-    // 通过私钥解锁账户
-    let account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
-    return account;
+  importWalletFromPrivateKey(privateKey: string, password: string) {
+    console.log('通过私钥和密码导入钱包 !!!!')
+    const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
+    const keystore = this._web3.eth.accounts.encrypt(privateKey, password);
+    console.log(`地址: ${account.address}`);
+    console.log(`私钥: ${privateKey}`);
+    console.log(`KeyStore: ${JSON.stringify(keystore)}`);
+    return {
+      privateKey: privateKey,
+      address: account.address,
+      keystore: keystore,
+    };
   }
+
+  /**
+   * 通过助记词导入钱包
+   * @param mnemonic 助记词
+   */
+  importWalletFromMnemonic(mnemonic: string) {
+    console.log('通过助记词导入钱包 !!!!')
+    // 根据助记词获取种子
+    const hdWallet = hdkey.fromMasterSeed(util.toBuffer(mnemonicToSeed(mnemonic)));
+    // 路径
+    const path = 'm/44\'/60\'/0\'/0/0';
+    // 根据路径获取钱包信息
+    const wallet = hdWallet.derivePath(path).getWallet();
+    // 获取私钥
+    const privateKey = '0x' + wallet.getPrivateKey().toString('hex');
+    // 获取公钥
+    const publicKey = wallet.getPublicKey().toString('hex');
+    const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
+    console.log('地址：' + account.address)
+    console.log('公钥：' + publicKey)
+    console.log('私钥1：' + privateKey)
+    console.log('私钥2：' + account.privateKey)
+    return {
+      privateKey: privateKey,
+      publicKey: publicKey,
+      address: account.address
+    };
+  }
+
+
+  /**
+   * 通过KeyStore和密码导入钱包
+   * @param keyStoreJson 
+   * @param password 
+   */
+  importWalletFromKeyStore(keyStoreJson: string, password: string) {
+    console.log('通过KeyStore和密码导入钱包 !!!!')
+    const account = this._web3.eth.accounts.decrypt(JSON.parse(keyStoreJson), password);
+    const keystore = this._web3.eth.accounts.encrypt(account.privateKey, password);
+    console.log('keystore: ' + JSON.stringify(keystore))
+    console.log('地址：' + account.address)
+    console.log('私钥：' + account.privateKey)
+    return {
+      privateKey: account.privateKey,
+      address: account.address,
+      keystore: keystore
+    };
+  }
+
 
   /**
    * 转账
