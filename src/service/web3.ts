@@ -1,6 +1,10 @@
 import { BigNumber } from 'ethers';
 import Web3 from 'web3';
+import { hdkey } from 'ethereumjs-wallet';
+import * as util from 'ethereumjs-util';
 const Tx = require('ethereumjs-tx');
+const crypto = require('crypto');
+import { mnemonicToSeed, entropyToMnemonic } from '@ethersproject/hdnode'
 
 export class DatoWalletService {
   constructor(url: string) {
@@ -14,13 +18,40 @@ export class DatoWalletService {
   //=============钱包创建 与 钱包导入================================
 
   /**
-   * 创建一个随机钱包实例
+   * 创建钱包
+   * @param password
+   * @returns 
    */
-  createWallet() {
-    let account = this._web3.eth.accounts.create();
-    let address = account.address;
-    let privateKey = account.privateKey;
-    return account
+  createWallet(password: string) {
+    // 生成助记词
+    const entropy = crypto.randomBytes(16);
+    const mnemonic = entropyToMnemonic(entropy);
+    // 根据助记词获取种子
+    const hdWallet = hdkey.fromMasterSeed(util.toBuffer(mnemonicToSeed(mnemonic)));
+    // 路径
+    const path = 'm/44\'/60\'/0\'/0/0';
+    // 根据路径获取钱包信息
+    const wallet = hdWallet.derivePath(path).getWallet();
+    // 获取私钥
+    const privateKey = '0x' + wallet.getPrivateKey().toString('hex');
+    // 获取公钥
+    const publicKey = wallet.getPublicKey().toString('hex');
+    // 根据私钥获取账户
+    const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
+    // 根据私钥和密码（用户输入的）获取 加密的json
+    const keystore = this._web3.eth.accounts.encrypt(privateKey, password)
+    console.log(`地址: ${account.address}`);
+    console.log(`私钥: ${privateKey}`);
+    console.log(`公钥: ${publicKey}`);
+    console.log(`助记词: ${mnemonic}`);
+    console.log(`KeyStore: ${JSON.stringify(keystore)}`);
+    return {
+      mnemonic: mnemonic,
+      privateKey: privateKey,
+      publicKey: publicKey,
+      address: account.address,
+      keystore: keystore,
+    }
   }
 
   /**
@@ -29,6 +60,8 @@ export class DatoWalletService {
    */
   importWalletFromPrivateKey(privateKey: string) {
     // 通过私钥解锁账户
+    // 根据助记词获取种子
+    const hdWallet = hdkey.fromMasterSeed();
     let account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
     return account;
   }
