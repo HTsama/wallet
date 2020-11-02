@@ -97,7 +97,9 @@ export default class Home extends Vue {
     }
   }
   mounted() {
+    // uni.removeStorageSync("wallet");
     this.wallet = uni.getStorageSync("wallet");
+    console.log(this.wallet);
     if (this.wallet.length > 0) {
       this.status = 1;
       (this as any).$refs.wallet.init();

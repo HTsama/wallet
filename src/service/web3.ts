@@ -40,11 +40,11 @@ export class DatoWalletService {
     const account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
     // 根据私钥和密码（用户输入的）获取 加密的json
     const keystore = this._web3.eth.accounts.encrypt(privateKey, password)
-    console.log(`地址: ${account.address}`);
-    console.log(`私钥: ${privateKey}`);
-    console.log(`公钥: ${publicKey}`);
-    console.log(`助记词: ${mnemonic}`);
-    console.log(`KeyStore: ${JSON.stringify(keystore)}`);
+    // console.log(`地址: ${account.address}`);
+    // console.log(`私钥: ${privateKey}`);
+    // console.log(`公钥: ${publicKey}`);
+    // console.log(`助记词: ${mnemonic}`);
+    // console.log(`KeyStore: ${JSON.stringify(keystore)}`);
     return {
       mnemonic: mnemonic,
       privateKey: privateKey,

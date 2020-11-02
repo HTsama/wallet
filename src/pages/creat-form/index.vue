@@ -72,7 +72,7 @@
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import { DatoWalletService } from "../../service/index";
+import { DatoWalletService } from "../../service/web3";
 
 @Component()
 export default class CreateForm extends Vue {
@@ -128,8 +128,7 @@ export default class CreateForm extends Vue {
       });
       return;
     } else {
-      this.walletInfo = this.DatoWallet.createWallet();
-
+      this.walletInfo = this.DatoWallet.createWallet(this.form.password);
       let walletJson = {
         info: {
           name: this.form.name,

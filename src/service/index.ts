@@ -123,7 +123,7 @@ export class DatoWalletService {
     console.log(`地址: ${mnemonicWallet.address}`);
     console.log(`私钥: ${mnemonicWallet.privateKey}`);
     console.log(`公钥: ${mnemonicWallet.publicKey}`);
-    console.log(`助记词: ${mnemonicWallet.mnemonic.phrase}`);
+    console.log(`助记词: ${mnemonicWallet.mnemonic}`);
     that.DATO_wallet = mnemonicWallet;
     return mnemonicWallet;
   }

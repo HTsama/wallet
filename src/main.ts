@@ -9,7 +9,7 @@ import uTitle from './components/u-title/index.vue';
 import uBody from './components/u-body/index.vue';
 import uTabbar from './components/u-tabbar/index.vue';
 import uInput from './components/u-input/index.vue';
-import tkiQrcode from 'tki-qrcode/components/tki-qrcode/tki-qrcode';
+import tkiQrcode from 'tki-qrcode/components/tki-qrcode/tki-qrcode.vue';
 // 引入工具类
 import utils from './util/index';
 // 引入配置

@@ -74,7 +74,7 @@ export default class EditWords extends Vue {
   onLoad(options) {
     this.localwallet = uni.getStorageSync("wallet");
     this.v = JSON.parse(options.v);
-    this.words = this.v.wallet.mnemonic.phrase.split(" ");
+    this.words = this.v.wallet.mnemonic.split(" ");
     this.randWords = this.rand(JSON.parse(JSON.stringify(this.words)));
     for (let k = 0; k < this.randWords.length; k++) {
       this.editWords.push("");

@@ -116,6 +116,7 @@
         </div>
       </div>
       <tki-qrcode
+        :loadMake="true"
         val="0x0697f327eBc6D0EDC820BA0bac2a89D2EEC03C0b"
         @result="qrR"
       />

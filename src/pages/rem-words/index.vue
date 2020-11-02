@@ -60,12 +60,12 @@ export default class RemWords extends Vue {
 
   onLoad(options) {
     this.v = JSON.parse(options.v);
-    this.words = this.v.wallet.mnemonic.phrase.split(" ");
+    this.words = this.v.wallet.mnemonic.split(" ");
     console.log(this.globalData.safeAreaInsets.bottom);
   }
   copy() {
     uni.setClipboardData({
-      data: this.v.wallet.mnemonic.phrase,
+      data: this.v.wallet.mnemonic,
     });
     uni.showToast({
       title: "复制助记词成功",
