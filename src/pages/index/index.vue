@@ -57,8 +57,8 @@
               <div class="copy u-copy iconfont"></div>
             </div>
             <p>
-              {{ walletAny[index].balance
-              }}<span>{{ localwallet[index].info.type }}</span>
+              {{ walletAny[index].balance }}
+              <span>{{ localwallet[index].info.type }}</span>
             </p>
             <div class="card-bg">
               <image
@@ -97,6 +97,28 @@
           收款
         </div>
       </div>
+      <div
+        style="width: 100%;"
+        v-for="(item, index) in moneyArr"
+        v-bind:key="index"
+      >
+        <div class="card-more" v-show="item.money != 0">
+          <div class="card-title">
+            <div class="card-icon">
+              <image
+                :src="'../../static/home/logo/' + item.title + '.png'"
+                mode="aspectFit"
+              />
+            </div>
+            {{ item.title }}
+          </div>
+          <div class="card-money">{{ item.money }}</div>
+        </div>
+      </div>
+      <tki-qrcode
+        val="0x0697f327eBc6D0EDC820BA0bac2a89D2EEC03C0b"
+        @result="qrR"
+      />
     </div>
   </div>
 </template>
@@ -105,7 +127,6 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { DatoWalletService } from "../../service/index";
 import uWallet from "@/pages/index/index.vue";
-
 @Component({
   props: {
     status: {
@@ -118,8 +139,20 @@ export default class extends Vue {
   name = "u-wallet";
   localwallet: Array<any> = [];
   walletIndex = 0;
-
   walletAny: any = [];
+  moneyArr: any = [
+    {
+      title: "ETH",
+      money: 0,
+    },
+    {
+      title: "DETO",
+      money: 0,
+    },
+  ];
+  qrR(e: any) {
+    console.log(e);
+  }
   async init() {
     this.localwallet = uni.getStorageSync("wallet");
     this.walletIndex = uni.getStorageSync("walletIndex");
@@ -128,14 +161,29 @@ export default class extends Vue {
       uni.setStorageSync("walletIndex", this.walletIndex);
     }
     if ((this as any).localwallet != "") {
-      for (let k = 0; k < this.localwallet.length; k++) {
-        this.walletAny.push({
+      this.localwallet.forEach(async (item, index) => {
+        let that = this;
+        that.walletAny.push({
           //余额
           balance: "0.0",
           address: "",
+          type: "",
         });
-        this.handleQueryBalance(k);
-      }
+        await that.handleQueryBalance(index);
+        if (item.info.type == "DETO") {
+          this.$set(
+            that.moneyArr[1],
+            "money",
+            that.moneyArr[1].money + Number(await that.balanceAdd(index))
+          );
+        } else if (item.info.type == "ETH") {
+          this.$set(
+            that.moneyArr[0],
+            "money",
+            that.moneyArr[0].money + Number(await that.balanceAdd(index))
+          );
+        }
+      });
     }
   }
   copy(index: number) {
@@ -167,15 +215,27 @@ export default class extends Vue {
   async handleQueryBalance(index: number) {
     const creatTyp: "DETO" | "ETH" = this.localwallet[index].info.type;
     const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
-
-    this.walletAny[index].balance = await this.$utils.getBalance(
-      creatIp,
-      this.localwallet[index].wallet.address
+    this.$set(
+      this.walletAny[index],
+      "balance",
+      await this.$utils.getBalance(
+        creatIp,
+        this.localwallet[index].wallet.address
+      )
     );
+    this.walletAny[index].type = creatTyp;
     this.walletAny[index].address =
       this.localwallet[index].wallet.address.substring(0, 5) +
       "******" +
       this.localwallet[index].wallet.address.substring(37, 42);
+  }
+  async balanceAdd(index: number) {
+    const creatTyp: "DETO" | "ETH" = this.localwallet[index].info.type;
+    const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
+    return await this.$utils.getBalance(
+      creatIp,
+      this.localwallet[index].wallet.address
+    );
   }
   goPage(type: string) {
     if (type == "wallet") {
@@ -197,6 +257,40 @@ export default class extends Vue {
 </script>
 
 <style lang="scss">
+.card-title {
+  width: 240upx;
+  height: 120upx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 28upx;
+  color: #333;
+}
+.card-money {
+  width: auto;
+  height: 120upx;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 30upx;
+  color: #333;
+  font-size: 28upx;
+}
+.card-icon {
+  width: 60upx;
+  height: 60upx;
+  margin: 30upx;
+  background: #f1f1f1;
+  opacity: 0.7;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-icon image {
+  width: 50%;
+  height: 50%;
+}
 .card-list-icon {
   width: 100upx;
   border-radius: 100%;
