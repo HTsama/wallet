@@ -60,8 +60,6 @@ export class DatoWalletService {
    */
   importWalletFromPrivateKey(privateKey: string) {
     // 通过私钥解锁账户
-    // 根据助记词获取种子
-    const hdWallet = hdkey.fromMasterSeed();
     let account = this._web3.eth.accounts.privateKeyToAccount(privateKey);
     return account;
   }
