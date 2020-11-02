@@ -62,15 +62,18 @@
           <span></span>
           <span></span>
         </div>
-        <!-- <div class="card-more">
-          <div class="card-more-list">
-            转账
-          </div>
-          <div class="card-more-list">
-            收款
-          </div>
-        </div> -->
       </div>
+      <!-- <div class="card-more">
+        <div class="card-more-list">
+          转账
+        </div>
+        <div class="card-more-list">
+          收款
+        </div>
+        <div class="card-more-list">
+          钱包
+        </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -262,34 +265,32 @@ export default class extends Vue {
   margin-left: 20upx;
 }
 .card-more {
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  left: 0;
+  box-sizing: border-box;
+  padding: 0 30upx;
   display: flex;
   flex-direction: row;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   background: rgba(255, 255, 255, 0.1);
-  height: 80upx;
 }
 .card-more-list {
-  font-size: 28upx;
+  width: 210upx;
+  height: 210upx;
+  border-radius: 16upx;
+  background: #fff;
+  margin-top: 30upx;
   color: #fff;
-  flex: 1;
   display: flex;
   align-items: center;
-  position: relative;
   justify-content: center;
-}
-.card-more-list::after {
-  position: absolute;
-  right: 0;
-  width: 2upx;
-  height: 26upx;
-  top: 50%;
-  margin-top: -13upx;
-  background: #fff;
-  content: "";
+  font-size: 42upx;
+  flex-direction: row;
+  box-sizing: border-box;
+  box-shadow: 0 0 10upx rgba(45, 122, 254, 0.25);
+  float: left;
+  position: relative;
 }
 .card-more-list:last-child::after {
   display: none;

@@ -159,8 +159,15 @@ export default class ImportKey extends Vue {
           publicKey: this.walletInfo.publicKey,
         },
       };
-      uni.navigateTo({
-        url: "../rem-words/index?v=" + JSON.stringify(walletJson),
+
+      this.localwallet = uni.getStorageSync("wallet");
+      if (!this.localwallet) {
+        this.localwallet = [];
+      }
+      this.localwallet = [...this.localwallet, ...[walletJson]];
+      uni.setStorageSync("wallet", this.localwallet);
+      uni.navigateBack({
+        delta: 5,
       });
     }
   }
