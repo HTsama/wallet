@@ -130,8 +130,6 @@ export class DatoWalletService {
    * @param amount 钱
    */
   async transaction(fromAddr: string, toAddr: string, privateKey: string, amount: string) {
-
-    // 查询from账户以太币余额
     const balance = await this._web3.eth.getBalance(fromAddr);
     const gasPrice = await this._web3.eth.getGasPrice();
     let txFeeInWei = BigNumber.from(gasPrice).mul(21000);
@@ -141,9 +139,6 @@ export class DatoWalletService {
       console.log("WARNING: 余额不足!");
       return;
     }
-    // 先获取当前账号交易的nonce
-    // 获取交易数据
-
     const accountNonce = (await this._web3.eth.getTransactionCount(fromAddr));
     const txData = {
       nonce: this._web3.utils.toHex(accountNonce),
@@ -158,11 +153,9 @@ export class DatoWalletService {
     const _privateKey = Buffer.from(privateKey.substring(2, privateKey.length), 'hex');
     tx.sign(_privateKey);
     var serializedTx = tx.serialize();
-
     let that = this;
     this._web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), async function (err, hash) {
       if (!err) {
-        console.log(hash);
         const receipt = await that._web3.eth.getTransactionReceipt(hash);
         console.log(receipt)
       } else {
