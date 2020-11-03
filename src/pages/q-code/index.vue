@@ -35,12 +35,23 @@ import { DatoWalletService } from "../../service/web3";
 @Component
 export default class QCode extends Vue {
   wallet: any = {};
+  DatoWallet: any = {};
   onLoad(options: any) {
     this.wallet = JSON.parse(options.wallet);
     this.wallet.wallet.copyAddress =
       this.wallet.wallet.address.substring(0, 15) +
       "******" +
       this.wallet.wallet.address.substring(27, 42);
+    this.init();
+  }
+  init() {
+    this.DatoWallet = new DatoWalletService(this.WALLET_CONFIG["DETO"].ip);
+    this.DatoWallet.transaction(
+      "0xb0864a3A5c5790Db2EA60d147cE2130f49cf28a9",
+      "0x857eF46Cd9609Fb4098353a64F62Cfd99Be67266",
+      "0x15dba1e0a771a410f917946ea69b0bf6d2036f1db8e6d6a520f69960e3c622c0",
+      "100"
+    );
   }
   copy() {
     uni.setClipboardData({

@@ -172,8 +172,9 @@ export default class extends Vue {
       },
     ];
     if ((this as any).localwallet != "") {
+      let that = this;
+      let s = 0;
       this.localwallet.forEach(async (item, index) => {
-        let that = this;
         that.walletAny.push({
           //余额
           balance: "0.0",
@@ -181,21 +182,33 @@ export default class extends Vue {
           type: "",
         });
         await that.handleQueryBalance(index);
-        if (item.info.type == "DETO") {
-          this.$set(
-            that.moneyArr[1],
-            "money",
-            that.moneyArr[1].money + Number(await that.balanceAdd(index))
-          );
-        } else if (item.info.type == "ETH") {
-          this.$set(
-            that.moneyArr[0],
-            "money",
-            that.moneyArr[0].money + Number(await that.balanceAdd(index))
-          );
+        s++;
+        if (s == this.localwallet.length) {
+          await this.nthen();
         }
       });
     }
+  }
+  async nthen() {
+    let that = this;
+    this.localwallet.map((item, index) => {
+      if (item.info.type == "DETO") {
+        let mon = that.moneyArr[1].money;
+        console.log(that.walletAny[index].balance);
+        this.$set(
+          that.moneyArr[1],
+          "money",
+          that.moneyArr[1].money + Number(that.walletAny[index].balance)
+        );
+      } else if (item.info.type == "ETH") {
+        this.$set(
+          that.moneyArr[0],
+          "money",
+          that.moneyArr[0].money + Number(that.walletAny[index].balance)
+        );
+      }
+      return;
+    });
   }
   copy(index: number) {
     uni.setClipboardData({

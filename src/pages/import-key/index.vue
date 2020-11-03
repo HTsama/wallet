@@ -76,7 +76,7 @@
 
 <script>
 import { Component, Vue } from "vue-property-decorator";
-import { DatoWalletService } from "../../service/index";
+import { DatoWalletService } from "../../service/web3";
 
 @Component()
 export default class ImportKey extends Vue {
@@ -143,7 +143,8 @@ export default class ImportKey extends Vue {
       return;
     } else {
       this.walletInfo = this.DatoWallet.importWalletFromPrivateKey(
-        this.form.key
+        this.form.key,
+        this.form.password
       );
       let walletJson = {
         info: {
