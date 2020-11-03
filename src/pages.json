@@ -98,6 +98,15 @@
           "bounce": "none"
         }
       }
+    },
+    {
+      "path": "pages/pay/index",
+      "style": {
+        "titleNView": false,
+        "app-plus": {
+          "bounce": "none"
+        }
+      }
     }
   ],
   "globalStyle": {

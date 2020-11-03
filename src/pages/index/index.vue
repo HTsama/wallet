@@ -89,7 +89,10 @@
           地址簿
         </div>
         <div class="card-more-list">
-          <div class="card-list-icon zz"></div>
+          <div
+            class="card-list-icon zz"
+            @click="goUrl('../pay/index', 'wallet')"
+          ></div>
           转账
         </div>
         <div class="card-more-list">
@@ -193,18 +196,18 @@ export default class extends Vue {
     let that = this;
     this.localwallet.map((item, index) => {
       if (item.info.type == "DETO") {
-        let mon = that.moneyArr[1].money;
-        console.log(that.walletAny[index].balance);
         this.$set(
           that.moneyArr[1],
           "money",
-          that.moneyArr[1].money + Number(that.walletAny[index].balance)
+          Number(that.moneyArr[1].money) +
+            Number(Number(that.walletAny[index].balance).toFixed(2))
         );
       } else if (item.info.type == "ETH") {
         this.$set(
           that.moneyArr[0],
           "money",
-          that.moneyArr[0].money + Number(that.walletAny[index].balance)
+          Number(that.moneyArr[0].money) +
+            Number(Number(that.walletAny[index].balance).toFixed(2))
         );
       }
       return;
@@ -240,27 +243,16 @@ export default class extends Vue {
   async handleQueryBalance(index: number) {
     const creatTyp: "DETO" | "ETH" = this.localwallet[index].info.type;
     const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
-    this.$set(
-      this.walletAny[index],
-      "balance",
-      await this.$utils.getBalance(
-        creatIp,
-        this.localwallet[index].wallet.address
-      )
+    let bal = await this.$utils.getBalance(
+      creatIp,
+      this.localwallet[index].wallet.address
     );
+    this.$set(this.walletAny[index], "balance", Number(bal).toFixed(2));
     this.walletAny[index].type = creatTyp;
     this.walletAny[index].address =
       this.localwallet[index].wallet.address.substring(0, 5) +
       "******" +
       this.localwallet[index].wallet.address.substring(37, 42);
-  }
-  async balanceAdd(index: number) {
-    const creatTyp: "DETO" | "ETH" = this.localwallet[index].info.type;
-    const creatIp: string = this.WALLET_CONFIG[creatTyp].ip;
-    return await this.$utils.getBalance(
-      creatIp,
-      this.localwallet[index].wallet.address
-    );
   }
   goPage(type: string) {
     if (type == "wallet") {
@@ -484,8 +476,5 @@ export default class extends Vue {
   box-sizing: border-box;
   float: left;
   position: relative;
-}
-.card-more-list:last-child::after {
-  display: none;
 }
 </style>
