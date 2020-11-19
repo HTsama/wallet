@@ -209,7 +209,7 @@ export class DatoWalletService {
 
     const txData = {
       nonce: this._web3.utils.toHex(accountNonce), // nonce,
-      gasLimit: this._web3.utils.toHex(21000), //"0x271000",
+      gasLimit: "0x271000",
       to: registryAddr,
       data: myContract.methods.transfer(contractToAddr, amount).encodeABI(), //ERC20转账
     };
@@ -230,6 +230,18 @@ export class DatoWalletService {
         if (!err) {
           const receipt = await that._web3.eth.getTransactionReceipt(hash);
           console.log(receipt);
+
+          // 查询对方的合约余额
+          await myContract.methods
+            .balanceOf(contractToAddr)
+            .call({ from: contractToAddr }, function(error: any, result: any) {
+              if (error) {
+                console.dir(error);
+                return;
+              }
+              let erc20formattedBalance = result;
+              console.dir(`合约余额 ${erc20formattedBalance}`);
+            });
         } else {
           console.error(err);
         }
